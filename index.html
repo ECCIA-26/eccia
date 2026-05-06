@@ -280,6 +280,61 @@
   .owner-cindy { background: #FCE7F3; color: #9D174D; }
   .owner-ambas { background: var(--verde-clr); color: var(--verde); }
 
+  /* ── TAREAS EDITABLES ── */
+  .btn-add-task {
+    padding: 5px 12px; border-radius: 6px; border: 1px solid var(--azul-med);
+    background: var(--azul-xclr); color: var(--azul-med); font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.18s; flex-shrink: 0;
+  }
+  .btn-add-task:hover { background: var(--azul-clr); }
+  .task-input-form { background: var(--gris-clr); border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .task-input-text {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--gris-borde); border-radius: 6px;
+    font-size: 13px; font-family: inherit; color: var(--texto); outline: none;
+  }
+  .task-input-text:focus { border-color: var(--azul-med); }
+  .task-prio-select {
+    padding: 6px 10px; border: 1px solid var(--gris-borde); border-radius: 6px;
+    font-size: 12px; background: var(--blanco); color: var(--texto); cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-save-task {
+    padding: 6px 14px; border-radius: 6px; border: none;
+    background: var(--azul-osc); color: white; font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .btn-save-task:hover { background: var(--azul-med); }
+  .btn-cancel-task {
+    padding: 6px 14px; border-radius: 6px; border: 1px solid var(--gris-borde);
+    background: var(--blanco); color: var(--gris); font-size: 12px; cursor: pointer;
+  }
+  .editable-tasks { min-height: 12px; }
+  .etask-item {
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+    background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 8px;
+    margin-bottom: 8px; transition: opacity 0.2s;
+  }
+  .etask-item.done { opacity: 0.5; }
+  .etask-item.done .etask-text { text-decoration: line-through; color: var(--gris); }
+  .etask-check {
+    width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--gris-borde);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 11px; transition: all 0.2s; margin-top: 1px;
+  }
+  .etask-item.done .etask-check { background: var(--verde); border-color: var(--verde); color: white; }
+  .etask-text { font-size: 13px; color: var(--texto); flex: 1; line-height: 1.4; }
+  .etask-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+  .etask-dot.alta { background: #EF4444; }
+  .etask-dot.media { background: #F59E0B; }
+  .etask-dot.baja { background: #94A3B8; }
+  .etask-del {
+    background: none; border: none; color: #CBD5E1; cursor: pointer;
+    font-size: 15px; padding: 0 2px; line-height: 1; flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .etask-del:hover { color: #EF4444; }
+  .etask-empty { font-size: 12px; color: #94A3B8; text-align: center; padding: 14px 0; }
+
   /* ── REDES SOCIALES ── */
   .social-card {
     background: var(--blanco); border-radius: 12px; padding: 20px 24px;
@@ -307,7 +362,116 @@
   .tag { display: inline-block; padding: 2px 8px; border-radius: 4px;
     font-size: 11px; font-weight: 600; background: var(--azul-clr); color: var(--azul-med); margin: 2px; }
 
+  /* ── CLAIM BANNER ── */
+  .claim-banner {
+    background: linear-gradient(135deg, var(--azul-osc) 0%, #1e4d8c 60%, #2563A8 100%);
+    border-radius: 14px; padding: 28px 36px; margin-bottom: 24px;
+    display: flex; align-items: center; gap: 24px;
+    box-shadow: 0 4px 20px rgba(27,58,107,0.25);
+    position: relative; overflow: hidden;
+  }
+  .claim-banner::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .claim-banner::after {
+    content: ''; position: absolute; bottom: -60px; right: 80px;
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .claim-icon { font-size: 42px; flex-shrink: 0; }
+  .claim-text { flex: 1; }
+  .claim-text blockquote {
+    font-size: 18px; font-weight: 700; color: #fff;
+    line-height: 1.5; margin: 0 0 8px 0; font-style: normal;
+  }
+  .claim-text blockquote em { color: #93C5FD; font-style: italic; }
+  .claim-sub { font-size: 12px; color: #94A3B8; margin: 0; }
+
+  /* ── CATÁLOGO ── */
+  .oferta-card {
+    background: var(--blanco); border-radius: 12px; padding: 22px 24px;
+    border: 2px solid var(--gris-borde); position: relative; transition: border-color 0.2s;
+  }
+  .oferta-card:hover { border-color: var(--azul-med); }
+  .oferta-card.activa { border-color: var(--azul-med); }
+  .oferta-card.futura { border-color: var(--gris-borde); opacity: 0.85; }
+  .oferta-estado {
+    position: absolute; top: 14px; right: 14px;
+    font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  }
+  .estado-activo { background: var(--verde-clr); color: var(--verde); }
+  .estado-pronto { background: var(--ambar-clr); color: var(--ambar); }
+  .estado-pipeline { background: var(--gris-clr); color: var(--gris); }
+  .oferta-icon { font-size: 30px; margin-bottom: 10px; }
+  .oferta-nombre { font-size: 15px; font-weight: 800; color: var(--azul-osc); margin-bottom: 4px; }
+  .oferta-precio { font-size: 24px; font-weight: 800; color: var(--azul-med); margin-bottom: 2px; }
+  .oferta-precio-sub { font-size: 11px; color: var(--gris); margin-bottom: 10px; }
+  .oferta-desc { font-size: 12px; color: var(--gris); line-height: 1.6; margin-bottom: 12px; }
+  .oferta-perfil { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  /* ── PRESUPUESTO TIPO ── */
+  .presup-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .presup-table th { background: var(--azul-osc); color: white; padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+  .presup-table td { padding: 10px 14px; border-bottom: 1px solid var(--gris-clr); color: var(--texto); }
+  .presup-table tr:last-child td { border-bottom: none; }
+  .presup-table tr:hover td { background: var(--gris-clr); }
+  .presup-total { font-weight: 800; color: var(--azul-osc); }
+
+  /* ── ANALIZADOR ── */
+  .analizador-form { background: var(--blanco); border-radius: 12px; padding: 28px; border: 1px solid var(--gris-borde); }
+  .analizador-step { margin-bottom: 20px; }
+  .analizador-label { font-size: 12px; font-weight: 700; color: var(--azul-osc); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+  .analizador-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt-btn {
+    padding: 8px 16px; border-radius: 8px; border: 2px solid var(--gris-borde);
+    background: var(--blanco); color: var(--gris); font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s;
+  }
+  .opt-btn:hover { border-color: var(--azul-med); color: var(--azul-med); }
+  .opt-btn.selected { border-color: var(--azul-med); background: var(--azul-clr); color: var(--azul-osc); }
+  .btn-analizar {
+    padding: 12px 32px; border-radius: 8px; border: none;
+    background: var(--azul-osc); color: white; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: background 0.2s; margin-top: 8px;
+  }
+  .btn-analizar:hover { background: var(--azul-med); }
+  .btn-reset {
+    padding: 10px 20px; border-radius: 8px; border: 2px solid var(--gris-borde);
+    background: var(--blanco); color: var(--gris); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px; margin-left: 10px;
+  }
+  .resultado-box {
+    background: linear-gradient(135deg, var(--azul-xclr) 0%, #e0f2fe 100%);
+    border: 2px solid var(--azul-med); border-radius: 14px; padding: 28px;
+    margin-top: 24px; display: none;
+  }
+  .resultado-box.visible { display: block; }
+  .resultado-title { font-size: 18px; font-weight: 800; color: var(--azul-osc); margin-bottom: 4px; }
+  .resultado-sub { font-size: 12px; color: var(--gris); margin-bottom: 20px; }
+  .resultado-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .resultado-bloque { background: var(--blanco); border-radius: 10px; padding: 16px; border: 1px solid var(--gris-borde); }
+  .resultado-bloque h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--azul-med); margin-bottom: 8px; }
+  .resultado-bloque p, .resultado-bloque li { font-size: 13px; color: var(--texto); line-height: 1.6; }
+  .resultado-bloque ul { list-style: none; padding: 0; }
+  .resultado-bloque ul li::before { content: "→ "; color: var(--azul-med); font-weight: 700; }
+  .resultado-oferta { background: var(--azul-osc); border-radius: 10px; padding: 16px; color: white; }
+  .resultado-oferta h4 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #93C5FD; margin-bottom: 8px; }
+  .resultado-oferta .precio-big { font-size: 28px; font-weight: 800; color: white; }
+  .resultado-oferta p { font-size: 12px; color: #CBD5E1; margin-top: 4px; }
+
+  /* ── KEYWORDS ── */
+  .kw-tag {
+    display: inline-block; padding: 5px 12px; border-radius: 20px; margin: 3px;
+    font-size: 12px; font-weight: 600; cursor: default;
+    background: var(--azul-clr); color: var(--azul-osc);
+  }
+  .kw-tag.instagram { background: #FCE7F3; color: #9D174D; }
+  .kw-tag.ambos { background: var(--verde-clr); color: var(--verde); }
+
   @media (max-width: 900px) {
+    .resultado-grid { grid-template-columns: 1fr; }
     .sidebar { width: 60px; }
     .sidebar-logo .brand, .sidebar-logo .sub, .sidebar-logo .badge,
     .nav-section, .nav-item span, .last-update { display: none; }
@@ -341,6 +505,12 @@
   <a class="nav-item" onclick="showSection('pipeline')">
     <span class="icon">🎯</span><span>Pipeline Clientes</span>
   </a>
+  <a class="nav-item" onclick="showSection('catalogo')">
+    <span class="icon">🛒</span><span>Catálogo de Ofertas</span>
+  </a>
+  <a class="nav-item" onclick="showSection('analizador')">
+    <span class="icon">🔍</span><span>Analizador de Cliente</span>
+  </a>
   <a class="nav-item" onclick="showSection('redes')">
     <span class="icon">📱</span><span>Redes Sociales</span>
   </a>
@@ -359,14 +529,14 @@
     <span class="icon">🎓</span><span>Curso Online</span>
   </a>
 
-  <div class="last-update">Actualizado: 05/05/2026</div>
+  <div class="last-update">Actualizado: 06/05/2026</div>
 </nav>
 
 <!-- ════════ MAIN ════════ -->
 <div class="main">
   <div class="topbar">
     <div class="topbar-title" id="page-title">Resumen del Proyecto</div>
-    <div class="topbar-date">05 de mayo de 2026</div>
+    <div class="topbar-date">06 de mayo de 2026</div>
   </div>
   <div class="content">
 
@@ -374,6 +544,17 @@
     <div class="section active" id="overview">
       <div class="section-title">Vista General</div>
       <div class="section-sub">Estado actual del proyecto ECCIA — Equia</div>
+
+      <div class="claim-banner">
+        <div class="claim-icon">💡</div>
+        <div class="claim-text">
+          <blockquote>
+            La IA te da la capacidad.<em> El mentoring te da la dirección.</em><br>
+            Las dos cosas juntas es lo que hace que el negocio cambie de verdad.
+          </blockquote>
+          <p class="claim-sub">Propuesta de valor ECCIA × Cindy — El ecosistema completo: implementación técnica + estrategia de negocio</p>
+        </div>
+      </div>
 
       <div class="overview-grid">
         <div class="stat-box">
@@ -409,8 +590,6 @@
           <div class="card-title">🎯 Segmentos Objetivo</div>
           <div class="info-row"><span class="info-label">Pymes</span><span class="info-val">Ingresos ≥ 1 M€</span></div>
           <div class="info-row"><span class="info-label">Solopreneurs</span><span class="info-val">Ingresos 30k–150k€</span></div>
-          <div class="info-row"><span class="info-label">Lead identificado 1</span><span class="info-val">Empresa de Carlos (~6M€)</span></div>
-          <div class="info-row"><span class="info-label">Lead identificado 2</span><span class="info-val">Human CTA (agencia marketing)</span></div>
           <div class="info-row"><span class="info-label">Canal principal</span><span class="info-val">LinkedIn + Masterclasses</span></div>
           <div class="info-row"><span class="info-label">Marca</span><span class="info-val">Agnóstica al modelo IA</span></div>
           <div class="info-row"><span class="info-label">Dominio</span><span class="info-val">empresarioscrecenconia.es</span></div>
@@ -425,8 +604,6 @@
           <div class="setup-item done"><div class="chk">✓</div><span class="label">Presupuesto base creado</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
           <div class="setup-item done"><div class="chk">✓</div><span class="label">Buyer Personas definidas</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
           <div class="setup-item"><div class="chk"></div><span class="label">Setup NUC completado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Perfil LinkedIn creado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Perfil Instagram creado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
           <div class="setup-item"><div class="chk"></div><span class="label">Primer cliente activo</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
           <div class="setup-item"><div class="chk"></div><span class="label">Curso Claude Kick-Off Day grabado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
           <div class="setup-item"><div class="chk"></div><span class="label">Masterclass realizada</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
@@ -518,22 +695,69 @@
           </div>
         </div>
       </div>
+
+      <!-- Guion masterclass Cindy -->
+      <div class="card" style="margin-top:20px; border-left:4px solid #9333EA;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+          <span style="font-size:22px;">🎤</span>
+          <div>
+            <div class="card-title" style="margin-bottom:2px; color:#7E22CE;">Promesas de la Masterclass — Guion Cindy</div>
+            <div style="font-size:11px; color:var(--gris); font-style:italic;">Borrador · Pendiente revisión Cindy + María</div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">🎨</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para que tengas tu <strong>libro de estilo gráfico / marca personal</strong> en un skill</div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">⚙️</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>ponerte en marcha una primera automatización</strong> y guiarte en la siguiente</div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">🦸</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>instalarte skills que sabemos que te van a dar superpoderes</strong></div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">✨</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>crear tus primeros skills / habilidades</strong> contigo</div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">💰</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>reforzar las palancas que necesitan atención</strong> para que ganes más dinero</div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">📱</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>postear en LinkedIn o Instagram como un pro</strong></div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">🎯</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para <strong>revisar o crear nuevas piezas de ventas, marketing, onboarding...</strong> en minutos</div>
+          </div>
+          <div style="background:#FAF5FF; border:1px solid #E9D5FF; border-radius:8px; padding:14px; display:flex; gap:12px; align-items:flex-start;">
+            <span style="font-size:18px; flex-shrink:0;">🧾</span>
+            <div style="font-size:13px; color:#581C87; line-height:1.5;">Para que <strong>elimines horas perdidas en la gestión de tu contabilidad trimestral, tus tickets, tu dashboard financiero</strong></div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ══ BUYER PERSONAS ══ -->
     <div class="section" id="personas">
       <div class="section-title">Buyer Personas</div>
-      <div class="section-sub">Perfiles de cliente ideal para enfocar captación y comunicación</div>
+      <div class="section-sub">3 perfiles solopreneur prioritarios · Perfil PYME secundario · Foco: captación vía masterclass</div>
 
-      <div class="grid-2">
-        <!-- Persona 1 -->
+      <!-- Fila 1: 3 solopreneurs -->
+      <div class="grid-3" style="margin-bottom:20px;">
+
+        <!-- BP1 La Creativa Desbordada -->
         <div class="persona-card">
-          <div class="persona-header" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);">
-            <div class="persona-avatar" style="background: #DBEAFE; color: #1D4ED8;">👔</div>
+          <div class="persona-header" style="background: linear-gradient(135deg, #FFF7ED 0%, #FED7AA 100%);">
+            <div class="persona-avatar" style="background: #FED7AA; color: #9A3412;">🎨</div>
             <div>
-              <h3>Carlos — El Empresario Pyme</h3>
-              <div class="role">Propietario / CEO · Empresa establecida</div>
-              <div class="revenue">Facturación: 1 M€ – 10 M€ anuales</div>
+              <h3>La Creativa Desbordada</h3>
+              <div class="role">Diseño · Interiorismo · Fotografía · Arquitectura</div>
+              <div class="revenue">Facturación: 30.000 € – 70.000 € anuales</div>
             </div>
           </div>
           <div class="persona-body">
@@ -541,55 +765,58 @@
               <div class="persona-block">
                 <h4>🎯 Objetivos</h4>
                 <ul>
-                  <li>Reducir tareas manuales repetitivas</li>
-                  <li>Escalar sin aumentar plantilla</li>
-                  <li>Tomar decisiones con más datos</li>
-                  <li>Competir con empresas más grandes</li>
+                  <li>Dejar de hacer lo que no es su oficio</li>
+                  <li>Tener las redes activas sin esfuerzo</li>
+                  <li>Presupuestos y propuestas más rápidos</li>
+                  <li>Dedicar tiempo a crear, no a gestionar</li>
                 </ul>
               </div>
               <div class="persona-block">
                 <h4>😤 Frustraciones</h4>
                 <ul>
-                  <li>Su equipo (3–10 personas) está saturado</li>
-                  <li>Siente que la IA es "para grandes empresas"</li>
-                  <li>No sabe por dónde empezar</li>
-                  <li>Ha intentado herramientas y las ha abandonado</li>
+                  <li>Caos en procesos y seguimiento de clientes</li>
+                  <li>Redes sociales abandonadas o irregulares</li>
+                  <li>Reinventa la rueda en cada proyecto</li>
+                  <li>Le da pereza todo lo que no es crear</li>
                 </ul>
               </div>
               <div class="persona-block">
                 <h4>💬 Qué dice</h4>
                 <ul>
-                  <li>"Necesito que mi gente haga más con lo mismo"</li>
-                  <li>"No tengo tiempo para aprender tecnología"</li>
-                  <li>"Quiero resultados, no experimentos"</li>
+                  <li>"No tengo tiempo para las redes"</li>
+                  <li>"Sé que podría ganar más pero no sé cómo"</li>
+                  <li>"Necesito que alguien lo haga por mí"</li>
                 </ul>
               </div>
               <div class="persona-block">
-                <h4>✨ Cómo le ayuda Equia</h4>
+                <h4>✨ Cómo le ayuda ECCIA</h4>
                 <ul>
-                  <li>Automatiza procesos sin necesidad técnica</li>
-                  <li>ROI tangible desde el primer mes</li>
-                  <li>Nosotros gestionamos todo el stack</li>
+                  <li>Claude escribe sus presupuestos y posts</li>
+                  <li>Plantillas de proceso que no cambian</li>
+                  <li>Redes con contenido sin que ella grabe</li>
                 </ul>
               </div>
             </div>
           </div>
-          <div class="persona-channels">
+          <div class="persona-channels" style="background:#FFF7ED;">
             <span>Canales:</span>
+            <span class="badge" style="background:#FED7AA;color:#9A3412;">Instagram ★</span>
             <span class="badge badge-inicial">LinkedIn</span>
-            <span class="badge badge-mensual">Referidos</span>
-            <span class="badge badge-inicial">Masterclasses</span>
+            <span class="badge badge-inicial">Masterclass</span>
+          </div>
+          <div style="padding:12px 24px; background:#FEF3C7; font-size:12px; color:#92400E; font-style:italic; border-top:1px solid #FED7AA;">
+            💡 Tono: empático, concreto, sin tecnicismos. Mostrar antes/después de una tarea que odia.
           </div>
         </div>
 
-        <!-- Persona 2 -->
+        <!-- BP2 La Especialista de Nicho -->
         <div class="persona-card">
           <div class="persona-header" style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);">
-            <div class="persona-avatar" style="background: #DCFCE7; color: #166534;">💻</div>
+            <div class="persona-avatar" style="background: #DCFCE7; color: #166534;">🧩</div>
             <div>
-              <h3>Sara — La Solopreneur Digital</h3>
-              <div class="role">Freelance / Consultora / Creadora de contenido</div>
-              <div class="revenue">Facturación: 30.000 € – 150.000 € anuales</div>
+              <h3>La Especialista de Nicho</h3>
+              <div class="role">Consultoría · Bienestar · Formación · Servicios especializados</div>
+              <div class="revenue">Facturación: 40.000 € – 90.000 € anuales</div>
             </div>
           </div>
           <div class="persona-body">
@@ -597,61 +824,156 @@
               <div class="persona-block">
                 <h4>🎯 Objetivos</h4>
                 <ul>
-                  <li>Multiplicar su capacidad productiva</li>
-                  <li>Generar ingresos mientras "duerme"</li>
-                  <li>Profesionalizar su operativa</li>
-                  <li>Dedicar tiempo a lo que realmente importa</li>
+                  <li>Llegar a más personas sin más horas</li>
+                  <li>Mantener la personalización al escalar</li>
+                  <li>Generar materiales educativos de calidad</li>
+                  <li>Comunicar mejor su valor diferencial</li>
                 </ul>
               </div>
               <div class="persona-block">
                 <h4>😤 Frustraciones</h4>
                 <ul>
-                  <li>Todo recae sobre ella, no puede descansar</li>
-                  <li>Pierde tiempo en gestiones administrativas</li>
-                  <li>Le cuesta delegar (no tiene equipo)</li>
-                  <li>Usa 10+ herramientas desconectadas entre sí</li>
+                  <li>No puede crecer sin trabajar más horas</li>
+                  <li>Le cuesta comunicar lo que hace de forma sencilla</li>
+                  <li>Miedo a perder autenticidad con IA</li>
+                  <li>Procesa muchos casos individualmente</li>
                 </ul>
               </div>
               <div class="persona-block">
                 <h4>💬 Qué dice</h4>
                 <ul>
-                  <li>"Soy yo quien hace todo y es agotador"</li>
-                  <li>"Uso IA pero de forma básica, no sé más"</li>
-                  <li>"Quiero escalar sin perder calidad"</li>
+                  <li>"Quiero escalar pero no perder cercanía"</li>
+                  <li>"Me cuesta crear contenido explicando lo que hago"</li>
+                  <li>"Soy muy proactiva si sé qué hacer"</li>
                 </ul>
               </div>
               <div class="persona-block">
-                <h4>✨ Cómo le ayuda Equia</h4>
+                <h4>✨ Cómo le ayuda ECCIA</h4>
                 <ul>
-                  <li>Claude como asistente personal 24/7</li>
-                  <li>Automatiza su back-office completo</li>
-                  <li>Ticket de entrada accesible (895€)</li>
+                  <li>Claude con su voz: nada suena genérico</li>
+                  <li>Materiales para clientes en minutos</li>
+                  <li>Contenido divulgativo de su nicho en piloto automático</li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="persona-channels">
             <span>Canales:</span>
+            <span class="badge badge-inicial">LinkedIn ★</span>
             <span class="badge badge-mensual">Instagram</span>
-            <span class="badge badge-inicial">LinkedIn</span>
-            <span class="badge badge-inicial">Masterclasses</span>
+            <span class="badge badge-inicial">Masterclass</span>
+          </div>
+          <div style="padding:12px 24px; background:var(--verde-clr); font-size:12px; color:var(--verde); font-style:italic; border-top:1px solid #BBF7D0;">
+            💡 Tono: profesional, empático. Demostrar que Claude mantiene su voz y personalización.
+          </div>
+        </div>
+
+        <!-- BP3 El Comercial de Alto Rendimiento -->
+        <div class="persona-card">
+          <div class="persona-header" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);">
+            <div class="persona-avatar" style="background: #DBEAFE; color: #1D4ED8;">🌍</div>
+            <div>
+              <h3>El Comercial de Alto Rendimiento</h3>
+              <div class="role">Representante · Agente comercial independiente · Internacional</div>
+              <div class="revenue">Facturación: 100.000 € – 200.000 € anuales</div>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-grid">
+              <div class="persona-block">
+                <h4>🎯 Objetivos</h4>
+                <ul>
+                  <li>Duplicar ingresos sin duplicar horas</li>
+                  <li>Gestionar más cuentas con la misma calidad</li>
+                  <li>Operar en varios idiomas y zonas horarias</li>
+                  <li>Profesionalizar reportes y comunicaciones</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>😤 Frustraciones</h4>
+                <ul>
+                  <li>Es el cuello de botella de su propio negocio</li>
+                  <li>Comunicación multiidioma consume mucho tiempo</li>
+                  <li>Seguimiento de cartera difícil de escalar</li>
+                  <li>No tiene herramientas a su altura</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>💬 Qué dice</h4>
+                <ul>
+                  <li>"Quiero cobrar el doble en dos años"</li>
+                  <li>"Muevo mucho volumen, necesito orden"</li>
+                  <li>"Tengo muchas ganas de meterme a fondo en IA"</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>✨ Cómo le ayuda ECCIA</h4>
+                <ul>
+                  <li>Claude multiidioma para comunicaciones</li>
+                  <li>Automatización de reportes y seguimiento</li>
+                  <li>Análisis de cuentas y preparación de reuniones</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="persona-channels">
+            <span>Canales:</span>
+            <span class="badge badge-inicial">LinkedIn ★</span>
+            <span class="badge badge-inicial">Masterclass</span>
+            <span class="badge badge-mensual">Referidos</span>
+          </div>
+          <div style="padding:12px 24px; background:var(--azul-xclr); font-size:12px; color:var(--azul-med); font-style:italic; border-top:1px solid var(--azul-clr);">
+            💡 Tono: directo, orientado a ROI. "¿Cuánto vale tu hora? Eso es lo que te devuelve Claude."
           </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:20px;">
-        <div class="card-title">🔑 Mensaje Clave por Persona</div>
-        <div class="grid-2">
+      <!-- Fila 2: PYME secundaria -->
+      <div class="card" style="border-left:4px solid var(--gris-borde); background:var(--gris-clr);">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+          <span style="font-size:24px;">🏢</span>
           <div>
-            <div style="font-weight:700; color:var(--azul-osc); margin-bottom:8px;">Para Carlos (Pyme):</div>
-            <div style="font-size:13px; color:var(--gris); font-style:italic; background:var(--azul-xclr); padding:12px; border-radius:8px;">
-              "Tu equipo de 3 personas puede rendir como uno de 6. Sin contratar a nadie. En 30 días."
-            </div>
+            <div style="font-weight:800; font-size:15px; color:var(--azul-osc);">PYME — Perfil Secundario (entrada por propuesta directa)</div>
+            <div style="font-size:12px; color:var(--gris);">3+ empleados · Facturación 1 M€+ · 1–3 usuarios de IA · NO entra por masterclass · Requiere propuesta personalizada</div>
+          </div>
+          <span class="badge badge-media" style="margin-left:auto; flex-shrink:0;">Proceso de venta diferente</span>
+        </div>
+        <div class="grid-3">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--azul-med); text-transform:uppercase; margin-bottom:6px;">El CEO / Tomador de decisión</div>
+            <div style="font-size:12px; color:var(--gris);">Habla de ROI, riesgo e imagen. Framing: inversión vs. gasto. Precio: ~2.500€ + EC 300–400€/mes.</div>
           </div>
           <div>
-            <div style="font-weight:700; color:var(--azul-osc); margin-bottom:8px;">Para Sara (Solopreneur):</div>
-            <div style="font-size:13px; color:var(--gris); font-style:italic; background:var(--verde-clr); padding:12px; border-radius:8px;">
-              "Para de hacer tú todo. Hay tareas que Claude puede hacer mientras duermes — y mejor que tú en algunas de ellas."
+            <div style="font-size:11px; font-weight:700; color:var(--azul-med); text-transform:uppercase; margin-bottom:6px;">El Mando Intermedio</div>
+            <div style="font-size:12px; color:var(--gris);">Teme perder control. Necesita sentir que es más fácil, no más complejo. Clave para la adopción interna.</div>
+          </div>
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--azul-med); text-transform:uppercase; margin-bottom:6px;">El Usuario Operativo</div>
+            <div style="font-size:12px; color:var(--gris);">Necesita simplicidad y empoderamiento. Mensaje: "no te quita el trabajo, te lo hace más fácil".</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mensajes clave -->
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title">🔑 Mensaje de Conversión por Perfil</div>
+        <div class="grid-3">
+          <div style="background:var(--gris-clr); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:#9A3412; margin-bottom:8px;">🎨 La Creativa Desbordada</div>
+            <div style="font-size:13px; color:var(--gris); font-style:italic; line-height:1.5;">
+              "Muéstrame una cosa de tu trabajo que odias hacer. En 10 minutos, Claude lo estará haciendo por ti."
+            </div>
+          </div>
+          <div style="background:var(--gris-clr); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--verde); margin-bottom:8px;">🧩 La Especialista de Nicho</div>
+            <div style="font-size:13px; color:var(--gris); font-style:italic; line-height:1.5;">
+              "Claude puede hablar exactamente con tu voz, a tu audiencia, con tu metodología. Sin que suene a máquina."
+            </div>
+          </div>
+          <div style="background:var(--gris-clr); border-radius:10px; padding:16px;">
+            <div style="font-size:12px; font-weight:700; color:var(--azul-med); margin-bottom:8px;">🌍 El Comercial de Alto Rendimiento</div>
+            <div style="font-size:13px; color:var(--gris); font-style:italic; line-height:1.5;">
+              "¿Cuánto facturarías si pudieras gestionar el doble de cuentas con el mismo tiempo? Eso es lo que hacemos."
             </div>
           </div>
         </div>
@@ -665,16 +987,11 @@
 
       <div class="kanban">
         <div class="kanban-col">
-          <div class="kanban-col-title">Identificado <span class="kanban-count">2</span></div>
+          <div class="kanban-col-title">Identificado <span class="kanban-count">1</span></div>
           <div class="kanban-card">
             <div class="client-name">Empresa de Carlos</div>
             <div class="client-desc">Pyme · 3 empleados · Interesada en Claude</div>
             <div class="client-revenue">~6 M€ facturación</div>
-          </div>
-          <div class="kanban-card">
-            <div class="client-name">Human CTA</div>
-            <div class="client-desc">Agencia marketing cooperativas · 3 empleados</div>
-            <div class="client-revenue">Asisten próxima masterclass</div>
           </div>
         </div>
         <div class="kanban-col">
@@ -705,6 +1022,280 @@
           <div class="stat-box ambar">
             <div class="stat-val" style="font-size:24px;">13.036€</div>
             <div class="stat-label">Total año 1<br>(setup + 12 meses)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ CATÁLOGO DE OFERTAS ══ -->
+    <div class="section" id="catalogo">
+      <div class="section-title">Catálogo de Ofertas</div>
+      <div class="section-sub">Todos los productos actuales y en pipeline · Precios + perfil objetivo + estado</div>
+
+      <!-- Servicios activos -->
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gris); margin-bottom:14px;">🟢 Servicios activos</div>
+      <div class="grid-3" style="margin-bottom:28px;">
+        <div class="oferta-card activa">
+          <span class="oferta-estado estado-activo">✓ Activo</span>
+          <div class="oferta-icon">🚀</div>
+          <div class="oferta-nombre">Claude Kick-Off Day</div>
+          <div class="oferta-precio">895 €</div>
+          <div class="oferta-precio-sub">+ IVA · Pago único · <s style="color:#CBD5E1;">Estándar: 2.500€</s></div>
+          <div class="oferta-desc">Jornada completa de implementación: análisis, configuración de Claude con memoria y skills, hasta 3 flujos N8N, integración NUC y formación. Curso de 15 vídeos incluido (val. 69€).</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-inicial">BP1 Creativa</span>
+            <span class="badge badge-ok">BP2 Nicho</span>
+            <span class="badge badge-mensual">BP3 Comercial</span>
+          </div>
+        </div>
+        <div class="oferta-card activa">
+          <span class="oferta-estado estado-activo">✓ Activo</span>
+          <div class="oferta-icon">🔄</div>
+          <div class="oferta-nombre">Evolución Continua</div>
+          <div class="oferta-precio">197 €<span style="font-size:14px;color:var(--gris);font-weight:400;">/mes</span></div>
+          <div class="oferta-precio-sub">+ IVA · Mín. 3 meses · <s style="color:#CBD5E1;">Estándar: 297€/mes</s></div>
+          <div class="oferta-desc">Monitorización proactiva, actualizaciones del modelo Claude, hasta 2h de mejoras mensuales, revisión trimestral, soporte en 24h y gestión de seguridad del NUC.</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-inicial">Todos los perfiles</span>
+          </div>
+        </div>
+        <div class="oferta-card activa">
+          <span class="oferta-estado estado-activo">✓ Activo</span>
+          <div class="oferta-icon">⚙️</div>
+          <div class="oferta-nombre">Nueva Automatización</div>
+          <div class="oferta-precio">desde 495 €</div>
+          <div class="oferta-precio-sub">+ IVA · Pago único por flujo</div>
+          <div class="oferta-desc">Flujo simple desde 495€. Flujo avanzado multi-sistema desde 895€. Diseño, implementación, pruebas y documentación incluidos. Integración con infraestructura existente.</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-ok">BP2 Nicho</span>
+            <span class="badge badge-mensual">BP3 Comercial</span>
+            <span class="badge badge-inicial">PYME</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Masterclass -->
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gris); margin-bottom:14px;">🎓 Producto de captación</div>
+      <div class="grid-2" style="margin-bottom:28px;">
+        <div class="oferta-card activa">
+          <span class="oferta-estado estado-activo">✓ Activo</span>
+          <div class="oferta-icon">🎤</div>
+          <div class="oferta-nombre">Masterclass Claude</div>
+          <div class="oferta-precio" style="font-size:18px;">27 € · 69 €</div>
+          <div class="oferta-precio-sub">Grabación sola: 27€ · Grabación + habilidades prácticas: 69€</div>
+          <div class="oferta-desc">Evento de captación y conversión. Audiencia mixta de solopreneurs. Cierre con oferta de Kick-Off Day. Canal de entrada principal para BP1, BP2 y BP3. Captación vía Cindy (LinkedIn + Instagram).</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-inicial">Todos los perfiles solopreneur</span>
+          </div>
+        </div>
+        <div class="oferta-card activa" style="background: linear-gradient(135deg, #f8f0ff 0%, #ede9fe 100%); border-color:#a78bfa;">
+          <span class="oferta-estado" style="background:#ede9fe;color:#5b21b6;">✓ Cindy</span>
+          <div class="oferta-icon">🧭</div>
+          <div class="oferta-nombre">Mentoring de Negocio (Cindy)</div>
+          <div class="oferta-precio-sub" style="margin-top:10px;">Post Kick-Off · Upsell natural del ecosistema</div>
+          <div class="oferta-desc">La capa estratégica del ecosistema. Tras el Kick-Off técnico, Cindy ofrece su programa de mentoring. El claim lo une todo: la IA da capacidad, el mentoring da dirección.</div>
+          <div class="oferta-perfil">
+            <span class="badge" style="background:#ede9fe;color:#5b21b6;">Clientes ECCIA post Kick-Off</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos en pipeline -->
+      <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--gris); margin-bottom:14px;">🔜 Otros posibles servicios a ofertar</div>
+      <div class="grid-3" style="margin-bottom:28px;">
+        <div class="oferta-card futura">
+          <span class="oferta-estado estado-pronto">Próximamente</span>
+          <div class="oferta-icon">📊</div>
+          <div class="oferta-nombre">Dashboard de Negocio</div>
+          <div class="oferta-precio" style="font-size:18px; color:var(--gris);">~495–895 €</div>
+          <div class="oferta-precio-sub">+ IVA · Setup único · Hipótesis de precio</div>
+          <div class="oferta-desc">Dashboard personalizado con las métricas clave del negocio del cliente. Visión clara del estado del negocio en tiempo real, adaptado a sus necesidades específicas.</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-media">BP3 Comercial</span>
+            <span class="badge badge-media">PYME</span>
+          </div>
+        </div>
+        <div class="oferta-card futura">
+          <span class="oferta-estado estado-pronto">Próximamente</span>
+          <div class="oferta-icon">📱</div>
+          <div class="oferta-nombre">Dashboard de Contenido RRSS</div>
+          <div class="oferta-precio" style="font-size:18px; color:var(--gris);">~295–495 €</div>
+          <div class="oferta-precio-sub">+ IVA · Setup único · Hipótesis de precio</div>
+          <div class="oferta-desc">Herramienta que simplifica la creación de contenido para redes sociales. Calendarios, ideas, plantillas y flujos automatizados de publicación.</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-media">BP1 Creativa</span>
+            <span class="badge badge-media">BP2 Nicho</span>
+          </div>
+        </div>
+        <div class="oferta-card futura">
+          <span class="oferta-estado estado-pipeline">Pipeline</span>
+          <div class="oferta-icon">🌐</div>
+          <div class="oferta-nombre">Gestión de Redes Sociales (CM)</div>
+          <div class="oferta-precio" style="font-size:18px; color:var(--gris);">~300–600 €/mes</div>
+          <div class="oferta-precio-sub">Cuota mensual · Hipótesis de precio</div>
+          <div class="oferta-desc">Servicio de Community Management para clientes que no quieren gestionar sus redes pero sí necesitan presencia activa. Combina IA + criterio humano (María).</div>
+          <div class="oferta-perfil">
+            <span class="badge badge-media">BP1 Creativa</span>
+            <span class="badge badge-media">BP2 Nicho</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla presupuesto tipo por perfil -->
+      <div class="card">
+        <div class="card-title">💶 Presupuesto Tipo por Perfil · Primer Año</div>
+        <div style="overflow-x:auto;">
+          <table class="presup-table">
+            <thead>
+              <tr>
+                <th>Perfil</th>
+                <th>Entrada recomendada</th>
+                <th>Cuota mensual EC</th>
+                <th>Total primer año</th>
+                <th>Nota</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🎨 La Creativa Desbordada</strong></td>
+                <td>895 € Kick-Off Day</td>
+                <td>197 €/mes</td>
+                <td class="presup-total">~3.259 €</td>
+                <td style="color:var(--gris);">Mostrar antes/después de una tarea que odia</td>
+              </tr>
+              <tr>
+                <td><strong>🧩 La Especialista de Nicho</strong></td>
+                <td>895 € Kick-Off + 1ª automatización</td>
+                <td>197–297 €/mes</td>
+                <td class="presup-total">~3.759–4.659 €</td>
+                <td style="color:var(--gris);">Demostrar que Claude mantiene su voz</td>
+              </tr>
+              <tr>
+                <td><strong>🌍 El Comercial de Alto Rendimiento</strong></td>
+                <td>895 € Kick-Off + 1ª automatización</td>
+                <td>297 €/mes</td>
+                <td class="presup-total">~4.459 €</td>
+                <td style="color:var(--gris);">Argumento ROI: multiplicar cuentas gestionadas</td>
+              </tr>
+              <tr>
+                <td><strong>🏢 PYME (Carlos y similar)</strong></td>
+                <td>~2.500 € Kick-Off (3 usuarios)</td>
+                <td>397 €/mes</td>
+                <td class="presup-total">~7.264 €</td>
+                <td style="color:var(--gris);">Propuesta directa, no por masterclass</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="margin-top:12px; font-size:11px; color:var(--gris); font-style:italic;">* Todos los precios son + IVA. El total primer año incluye Kick-Off (o acceso) + 12 meses de Evolución Continua.</div>
+      </div>
+    </div>
+
+    <!-- ══ ANALIZADOR DE CLIENTE ══ -->
+    <div class="section" id="analizador">
+      <div class="section-title">Analizador de Cliente</div>
+      <div class="section-sub">Describe al prospecto → recibe perfil, oferta ideal, tono y argumentos de venta</div>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="analizador-form">
+          <div class="analizador-step">
+            <div class="analizador-label">1. ¿Cuántas personas tiene en su negocio?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'tamano','solo')">Solo/a (1 persona)</button>
+              <button class="opt-btn" onclick="selectOpt(this,'tamano','micro')">Micro (2–3 personas)</button>
+              <button class="opt-btn" onclick="selectOpt(this,'tamano','pyme')">Pyme (4–15 personas)</button>
+            </div>
+          </div>
+          <div class="analizador-step">
+            <div class="analizador-label">2. ¿Qué tipo de negocio tiene?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'tipo','creativo')">🎨 Creativo/Artístico</button>
+              <button class="opt-btn" onclick="selectOpt(this,'tipo','consultor')">🧩 Consultoría/Formación/Bienestar</button>
+              <button class="opt-btn" onclick="selectOpt(this,'tipo','comercial')">🌍 Comercial/Ventas/Internacional</button>
+              <button class="opt-btn" onclick="selectOpt(this,'tipo','servicio')">🔧 Servicios profesionales/Otros</button>
+            </div>
+          </div>
+          <div class="analizador-step">
+            <div class="analizador-label">3. ¿Cuál es su facturación aproximada?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'facturacion','baja')">Menos de 50.000 €</button>
+              <button class="opt-btn" onclick="selectOpt(this,'facturacion','media')">50.000 – 120.000 €</button>
+              <button class="opt-btn" onclick="selectOpt(this,'facturacion','alta')">Más de 120.000 €</button>
+            </div>
+          </div>
+          <div class="analizador-step">
+            <div class="analizador-label">4. ¿Cuál es su dolor principal?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'dolor','tiempo')">⏰ No tiene tiempo para nada</button>
+              <button class="opt-btn" onclick="selectOpt(this,'dolor','contenido')">📱 No genera contenido para redes</button>
+              <button class="opt-btn" onclick="selectOpt(this,'dolor','escala')">📈 No puede crecer sin trabajar más</button>
+              <button class="opt-btn" onclick="selectOpt(this,'dolor','roi')">💶 Quiere multiplicar ingresos</button>
+            </div>
+          </div>
+          <div class="analizador-step">
+            <div class="analizador-label">5. ¿Por dónde ha llegado?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'canal','masterclass')">🎤 Masterclass</button>
+              <button class="opt-btn" onclick="selectOpt(this,'canal','linkedin')">💼 LinkedIn</button>
+              <button class="opt-btn" onclick="selectOpt(this,'canal','instagram')">📸 Instagram</button>
+              <button class="opt-btn" onclick="selectOpt(this,'canal','referido')">🤝 Referido</button>
+            </div>
+          </div>
+          <div class="analizador-step">
+            <div class="analizador-label">6. ¿Cómo percibe la IA?</div>
+            <div class="analizador-options">
+              <button class="opt-btn" onclick="selectOpt(this,'actitud','curioso')">🔍 Curioso pero no sabe por dónde</button>
+              <button class="opt-btn" onclick="selectOpt(this,'actitud','motivado')">🚀 Muy motivado, quiere ir a fondo</button>
+              <button class="opt-btn" onclick="selectOpt(this,'actitud','escéptico')">🤔 Escéptico / le da pereza aprender</button>
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <button class="btn-analizar" onclick="analizarCliente()">🔍 Analizar perfil</button>
+            <button class="btn-reset" onclick="resetAnalizador()">↺ Reiniciar</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="card" style="margin-bottom:16px; background:var(--azul-xclr); border-color:var(--azul-clr);">
+            <div class="card-title" style="color:var(--azul-med);">💡 ¿Cómo funciona?</div>
+            <div style="font-size:13px; color:var(--gris); line-height:1.7;">
+              Selecciona las opciones que describen al prospecto con quien estás hablando (o que acabas de conocer en la masterclass). El analizador te dirá:<br><br>
+              <strong>→ Qué Buyer Persona es</strong><br>
+              <strong>→ Qué oferta proponerle</strong><br>
+              <strong>→ Qué tono usar</strong><br>
+              <strong>→ Los 3 argumentos más potentes</strong><br><br>
+              No necesitas acertar en todo — con 3 o 4 respuestas ya funciona.
+            </div>
+          </div>
+          <div class="card" style="background:var(--gris-clr); border-color:var(--gris-borde);">
+            <div class="card-title">📌 Señales rápidas de cada perfil</div>
+            <div style="font-size:12px; color:var(--gris); line-height:1.8;">
+              <div style="margin-bottom:6px;"><span style="color:#9A3412; font-weight:700;">🎨 La Creativa:</span> "No tengo tiempo para las redes" · Oficio creativo/manual · Desorganización visible</div>
+              <div style="margin-bottom:6px;"><span style="color:var(--verde); font-weight:700;">🧩 La Especialista:</span> "Quiero escalar sin perder calidad" · Nicho muy definido · Proactiva</div>
+              <div style="margin-bottom:6px;"><span style="color:var(--azul-med); font-weight:700;">🌍 El Comercial:</span> "Quiero cobrar el doble" · Facturación alta · Opera en varios mercados</div>
+              <div><span style="color:var(--gris); font-weight:700;">🏢 PYME:</span> Más de 3 empleados · Viene por referido · Necesita propuesta directa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div class="resultado-box" id="resultado-analizador">
+        <div class="resultado-title" id="res-titulo">—</div>
+        <div class="resultado-sub" id="res-sub">—</div>
+        <div class="resultado-grid">
+          <div class="resultado-bloque resultado-oferta">
+            <h4>💶 Oferta recomendada</h4>
+            <div class="precio-big" id="res-precio">—</div>
+            <p id="res-oferta-desc">—</p>
+          </div>
+          <div class="resultado-bloque">
+            <h4>🎙️ Tono a usar</h4>
+            <p id="res-tono">—</p>
+          </div>
+          <div class="resultado-bloque" style="grid-column: 1 / -1;">
+            <h4>🎯 Los 3 argumentos más potentes</h4>
+            <ul id="res-argumentos"><li>—</li></ul>
           </div>
         </div>
       </div>
@@ -750,15 +1341,90 @@
         </div>
       </div>
 
+      <!-- Keywords de captación -->
       <div class="card" style="margin-top:20px;">
-        <div class="card-title">📅 Próximas acciones en Redes</div>
-        <div class="setup-items">
-          <div class="setup-item"><div class="chk"></div><span class="label">Crear perfil LinkedIn Equia</span><span class="tipo-badge badge badge-alta">Alta prioridad</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Crear perfil Instagram Equia</span><span class="tipo-badge badge badge-alta">Alta prioridad</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Definir bio y descripción de cada perfil</span><span class="tipo-badge badge badge-media">Media</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Publicar primer post de presentación en LinkedIn</span><span class="tipo-badge badge badge-media">Media</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Grabar primer Reel para Instagram</span><span class="tipo-badge badge badge-media">Media</span></div>
-          <div class="setup-item"><div class="chk"></div><span class="label">Crear plantilla visual de posts (Canva)</span><span class="tipo-badge badge badge-baja">Baja</span></div>
+        <div class="card-title">🔍 Biblioteca de Keywords · Búsqueda de Perfiles</div>
+        <div style="font-size:12px; color:var(--gris); margin-bottom:16px;">Palabras clave, señales y tipos de cuenta para encontrar cada perfil. <span style="background:var(--azul-clr);color:var(--azul-med);padding:2px 8px;border-radius:4px;font-weight:700;">💼 LinkedIn</span> <span style="background:#FCE7F3;color:#9D174D;padding:2px 8px;border-radius:4px;font-weight:700;">📸 Instagram</span> <span style="background:var(--verde-clr);color:var(--verde);padding:2px 8px;border-radius:4px;font-weight:700;">🔁 Ambas</span></div>
+
+        <div class="grid-3">
+          <div>
+            <div style="font-size:12px; font-weight:700; color:#9A3412; margin-bottom:10px; border-bottom:2px solid #FED7AA; padding-bottom:6px;">🎨 La Creativa Desbordada</div>
+            <div style="margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">TÍTULOS / CARGOS LINKEDIN</div>
+            <span class="kw-tag">Diseñadora de interiores</span>
+            <span class="kw-tag">Fotógrafa freelance</span>
+            <span class="kw-tag">Arquitecta independiente</span>
+            <span class="kw-tag">Ilustradora</span>
+            <span class="kw-tag">Decoradora</span>
+            <span class="kw-tag">Diseñadora gráfica</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">HASHTAGS INSTAGRAM</div>
+            <span class="kw-tag instagram">#interiorismo</span>
+            <span class="kw-tag instagram">#diseñointerior</span>
+            <span class="kw-tag instagram">#fotografafreelance</span>
+            <span class="kw-tag instagram">#creativaemprendedora</span>
+            <span class="kw-tag instagram">#emprendedoracreativa</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">SEÑALES DE COMPRA</div>
+            <div style="font-size:12px; color:var(--gris); line-height:1.7;">Posts quejándose de tareas admin · Redes con poca actividad · "No tengo tiempo" frecuente · Contenido de su oficio pero sin estrategia</div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:700; color:var(--verde); margin-bottom:10px; border-bottom:2px solid #BBF7D0; padding-bottom:6px;">🧩 La Especialista de Nicho</div>
+            <div style="margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">TÍTULOS / CARGOS LINKEDIN</div>
+            <span class="kw-tag">Consultora independiente</span>
+            <span class="kw-tag">Coach</span>
+            <span class="kw-tag">Formadora</span>
+            <span class="kw-tag">Terapeuta</span>
+            <span class="kw-tag">Asesora especializada</span>
+            <span class="kw-tag">Fundadora</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">HASHTAGS INSTAGRAM</div>
+            <span class="kw-tag instagram">#consultora</span>
+            <span class="kw-tag instagram">#emprendedora</span>
+            <span class="kw-tag instagram">#bienestar</span>
+            <span class="kw-tag instagram">#formaciononline</span>
+            <span class="kw-tag instagram">#expertaennicho</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">SEÑALES DE COMPRA</div>
+            <div style="font-size:12px; color:var(--gris); line-height:1.7;">Publica sobre su metodología · Habla de sus clientes con detalle · Menciona querer escalar · Activa en LinkedIn con contenido de valor</div>
+          </div>
+
+          <div>
+            <div style="font-size:12px; font-weight:700; color:var(--azul-med); margin-bottom:10px; border-bottom:2px solid var(--azul-clr); padding-bottom:6px;">🌍 El Comercial de Alto Rendimiento</div>
+            <div style="margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">TÍTULOS / CARGOS LINKEDIN</div>
+            <span class="kw-tag">Representante comercial</span>
+            <span class="kw-tag">Agente independiente</span>
+            <span class="kw-tag">Export manager</span>
+            <span class="kw-tag">Business development</span>
+            <span class="kw-tag">Comercial freelance</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">FILTROS LINKEDIN ÚTILES</div>
+            <span class="kw-tag">1–10 empleados</span>
+            <span class="kw-tag">Autónomo</span>
+            <span class="kw-tag">España + Internacional</span>
+            <div style="margin-top:10px; margin-bottom:8px; font-size:11px; color:var(--gris); font-weight:700;">SEÑALES DE COMPRA</div>
+            <div style="font-size:12px; color:var(--gris); line-height:1.7;">Perfil con mucha experiencia internacional · Trabaja con varias marcas · Menciona Asia/export/distribución · Objetivo claro de crecimiento</div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px; padding:14px; background:var(--ambar-clr); border-radius:8px; border-left:4px solid var(--ambar);">
+          <div style="font-size:12px; font-weight:700; color:var(--ambar); margin-bottom:4px;">💡 Diferencia clave LinkedIn vs Instagram</div>
+          <div style="font-size:12px; color:#92400E; line-height:1.6;">En <strong>LinkedIn</strong> convences con lógica y credibilidad profesional: casos de uso reales, datos, resultados. En <strong>Instagram</strong> convences con emoción y simplicidad visual: la misma idea pero con un gancho en los primeros 2 segundos y formato Reel. Nunca copies el mismo contenido de uno a otro.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span>📅 Próximas acciones en Redes</span>
+          <button class="btn-add-task" onclick="showTaskForm('redes')">+ Añadir acción</button>
+        </div>
+        <div id="tasks-redes" class="editable-tasks"></div>
+        <div id="form-redes" class="task-input-form" style="display:none;">
+          <input type="text" id="input-redes" class="task-input-text" placeholder="Escribe la acción..." onkeydown="if(event.key==='Enter') addTask('redes')" />
+          <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+            <select id="prio-redes" class="task-prio-select">
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="baja">⚪ Baja</option>
+            </select>
+            <button class="btn-save-task" onclick="addTask('redes')">Guardar</button>
+            <button class="btn-cancel-task" onclick="hideTaskForm('redes')">Cancelar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -887,33 +1553,72 @@
     <!-- ══ PRÓXIMOS PASOS ══ -->
     <div class="section" id="pasos">
       <div class="section-title">Próximos Pasos</div>
-      <div class="section-sub">Tareas pendientes por responsable</div>
+      <div class="section-sub">Tareas pendientes por responsable — se guardan automáticamente en el navegador</div>
+
+      <div style="background:var(--azul-xclr); border:1px solid var(--azul-clr); border-radius:10px; padding:12px 18px; margin-bottom:20px; font-size:12px; color:var(--azul-med); display:flex; align-items:center; gap:8px;">
+        💾 <span>Las tareas se guardan en tu navegador. Puedes añadir, marcar como hecha y eliminar en cualquier momento.</span>
+      </div>
 
       <div class="grid-2">
-        <div class="card">
-          <div class="card-title" style="color:#3730A3;">🟣 María</div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Adquirir NUC (Beelink EQ12/EQ14 recomendado)</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Crear perfil LinkedIn Equia con Claude</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Crear perfil Instagram Equia</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Grabar módulos del curso en Loom</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Estructurar curso en A Players Academy</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Setup completo del NUC (con Claude paso a paso)</div><span class="task-owner owner-maria">María</span></div>
-          <div class="task-item"><div class="task-dot dot-baja"></div><div class="task-text">Abrir cuenta GitHub + subir este dashboard</div><span class="task-owner owner-maria">María</span></div>
+        <div class="card" id="block-maria">
+          <div class="card-title" style="color:#3730A3; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <span>🟣 María</span>
+            <button class="btn-add-task" onclick="showTaskForm('maria')">+ Añadir tarea</button>
+          </div>
+          <div id="tasks-maria" class="editable-tasks"></div>
+          <div id="form-maria" class="task-input-form" style="display:none;">
+            <input type="text" id="input-maria" class="task-input-text" placeholder="Escribe la tarea..." onkeydown="if(event.key==='Enter') addTask('maria')" />
+            <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+              <select id="prio-maria" class="task-prio-select">
+                <option value="alta">🔴 Alta</option>
+                <option value="media" selected>🟡 Media</option>
+                <option value="baja">⚪ Baja</option>
+              </select>
+              <button class="btn-save-task" onclick="addTask('maria')">Guardar</button>
+              <button class="btn-cancel-task" onclick="hideTaskForm('maria')">Cancelar</button>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-title" style="color:#9D174D;">🩷 Cindy</div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Dar credenciales Loom y A Players Academy a María</div><span class="task-owner owner-cindy">Cindy</span></div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Continuar generación de leads en LinkedIn para masterclass</div><span class="task-owner owner-cindy">Cindy</span></div>
-          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Redactar plan de negocio (basado en transcripción reunión)</div><span class="task-owner owner-cindy">Cindy</span></div>
-          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Preparar materiales para la masterclass del miércoles</div><span class="task-owner owner-cindy">Cindy</span></div>
+
+        <div class="card" id="block-cindy">
+          <div class="card-title" style="color:#9D174D; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+            <span>🩷 Cindy</span>
+            <button class="btn-add-task" onclick="showTaskForm('cindy')">+ Añadir tarea</button>
+          </div>
+          <div id="tasks-cindy" class="editable-tasks"></div>
+          <div id="form-cindy" class="task-input-form" style="display:none;">
+            <input type="text" id="input-cindy" class="task-input-text" placeholder="Escribe la tarea..." onkeydown="if(event.key==='Enter') addTask('cindy')" />
+            <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+              <select id="prio-cindy" class="task-prio-select">
+                <option value="alta">🔴 Alta</option>
+                <option value="media" selected>🟡 Media</option>
+                <option value="baja">⚪ Baja</option>
+              </select>
+              <button class="btn-save-task" onclick="addTask('cindy')">Guardar</button>
+              <button class="btn-cancel-task" onclick="hideTaskForm('cindy')">Cancelar</button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:4px;">
-        <div class="card-title" style="color:var(--verde);">🤝 Ambas</div>
-        <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Reunirse antes de la masterclass del miércoles para ultimar detalles</div><span class="task-owner owner-ambas">Ambas</span></div>
-        <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Definir guion y argumentario de ventas para primeras reuniones con leads</div><span class="task-owner owner-ambas">Ambas</span></div>
-        <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Agendar primera demo con empresa de Carlos</div><span class="task-owner owner-ambas">Ambas</span></div>
+      <div class="card" style="margin-top:16px;" id="block-ambas">
+        <div class="card-title" style="color:var(--verde); display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span>🤝 Ambas</span>
+          <button class="btn-add-task" onclick="showTaskForm('ambas')">+ Añadir tarea</button>
+        </div>
+        <div id="tasks-ambas" class="editable-tasks"></div>
+        <div id="form-ambas" class="task-input-form" style="display:none;">
+          <input type="text" id="input-ambas" class="task-input-text" placeholder="Escribe la tarea..." onkeydown="if(event.key==='Enter') addTask('ambas')" />
+          <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+            <select id="prio-ambas" class="task-prio-select">
+              <option value="alta">🔴 Alta</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="baja">⚪ Baja</option>
+            </select>
+            <button class="btn-save-task" onclick="addTask('ambas')">Guardar</button>
+            <button class="btn-cancel-task" onclick="hideTaskForm('ambas')">Cancelar</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1144,6 +1849,8 @@
     modelo: 'Modelo de Negocio',
     personas: 'Buyer Personas',
     pipeline: 'Pipeline de Clientes',
+    catalogo: 'Catálogo de Ofertas',
+    analizador: 'Analizador de Cliente',
     redes: 'Estrategia Redes Sociales',
     nuc: 'Setup NUC',
     docs: 'Documentos',
@@ -1344,12 +2051,190 @@
 
   initGuionButtons();
 
+  // ── TAREAS EDITABLES (localStorage) ──
+  const BLOCKS = ['maria', 'cindy', 'ambas', 'redes'];
+
+  function loadTasks() {
+    return JSON.parse(localStorage.getItem('eccia_tasks') || '{"maria":[],"cindy":[],"ambas":[],"redes":[]}');
+  }
+
+  function saveTasks(data) {
+    localStorage.setItem('eccia_tasks', JSON.stringify(data));
+  }
+
+  function renderTasks() {
+    const data = loadTasks();
+    BLOCKS.forEach(function(block) {
+      const container = document.getElementById('tasks-' + block);
+      if (!container) return;
+      const tasks = data[block] || [];
+      if (tasks.length === 0) {
+        container.innerHTML = '<div class="etask-empty">Sin tareas — pulsa "+ Añadir tarea" para empezar</div>';
+        return;
+      }
+      container.innerHTML = tasks.map(function(t, i) {
+        return '<div class="etask-item' + (t.done ? ' done' : '') + '">' +
+          '<div class="etask-check" onclick="toggleTask(\'' + block + '\',' + i + ')">' + (t.done ? '✓' : '') + '</div>' +
+          '<div class="etask-dot ' + t.prio + '"></div>' +
+          '<div class="etask-text">' + escapeHtml(t.text) + '</div>' +
+          '<button class="etask-del" onclick="deleteTask(\'' + block + '\',' + i + ')" title="Eliminar">×</button>' +
+          '</div>';
+      }).join('');
+    });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function showTaskForm(block) {
+    document.getElementById('form-' + block).style.display = 'block';
+    setTimeout(function() { document.getElementById('input-' + block).focus(); }, 50);
+  }
+
+  function hideTaskForm(block) {
+    document.getElementById('form-' + block).style.display = 'none';
+    document.getElementById('input-' + block).value = '';
+  }
+
+  function addTask(block) {
+    const input = document.getElementById('input-' + block);
+    const prio = document.getElementById('prio-' + block).value;
+    const text = input.value.trim();
+    if (!text) { input.focus(); return; }
+    const data = loadTasks();
+    if (!data[block]) data[block] = [];
+    data[block].push({ text: text, prio: prio, done: false });
+    saveTasks(data);
+    hideTaskForm(block);
+    renderTasks();
+  }
+
+  function toggleTask(block, idx) {
+    const data = loadTasks();
+    if (data[block] && data[block][idx] !== undefined) {
+      data[block][idx].done = !data[block][idx].done;
+      saveTasks(data);
+      renderTasks();
+    }
+  }
+
+  function deleteTask(block, idx) {
+    const data = loadTasks();
+    if (data[block]) {
+      data[block].splice(idx, 1);
+      saveTasks(data);
+      renderTasks();
+    }
+  }
+
+  renderTasks();
+
   function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     document.getElementById('page-title').textContent = titles[id];
     event.currentTarget.classList.add('active');
+  }
+
+  // ── ANALIZADOR DE CLIENTE ──
+  const selecciones = {};
+
+  function selectOpt(btn, grupo, valor) {
+    // Deseleccionar en el mismo grupo
+    btn.closest('.analizador-options').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selecciones[grupo] = valor;
+  }
+
+  function resetAnalizador() {
+    Object.keys(selecciones).forEach(k => delete selecciones[k]);
+    document.querySelectorAll('#analizador .opt-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('resultado-analizador').classList.remove('visible');
+  }
+
+  function analizarCliente() {
+    const { tamano, tipo, facturacion, dolor, canal, actitud } = selecciones;
+
+    let perfil, ofertaPrecio, ofertaDesc, tono, args;
+
+    // Lógica de clasificación
+    const esPyme = tamano === 'pyme';
+    const esComercial = tipo === 'comercial' || facturacion === 'alta';
+    const esCreativa = tipo === 'creativo';
+    const esEspecialista = tipo === 'consultor';
+    const esEscéptico = actitud === 'escéptico';
+    const quiereRedes = dolor === 'contenido';
+    const quiereROI = dolor === 'roi';
+
+    if (esPyme) {
+      perfil = '🏢 PYME — Perfil secundario';
+      ofertaPrecio = '~2.500 €';
+      ofertaDesc = 'Claude Kick-Off Day para equipo (3 usuarios) + Evolución Continua ~400€/mes. Requiere propuesta directa personalizada, no masterclass.';
+      tono = 'Profesional y orientado a ROI con el CEO. Tranquilizador con los usuarios. Hablar de "inversión" nunca de "gasto".';
+      args = [
+        'Tu equipo de 3 puede rendir como uno de 6, sin contratar a nadie',
+        'Nosotros gestionamos toda la tecnología — vosotros os dedicáis al negocio',
+        'Precio equivalente a 1 mes de un empleado junior, con impacto en toda la empresa'
+      ];
+    } else if (esComercial || quiereROI) {
+      perfil = '🌍 El Comercial de Alto Rendimiento (BP3)';
+      ofertaPrecio = '895 € + auto';
+      ofertaDesc = 'Kick-Off Day (895€) + 1ª automatización de seguimiento o reportes (desde 495€) + Evolución Continua ~297€/mes.';
+      tono = 'Directo y enfocado en ingresos. Nada de "productividad" — hablar de multiplicar cuentas, facturación y capacidad de gestión. Respeta su inteligencia, no expliques de más.';
+      args = [
+        '¿Cuánto facturarías si pudieras gestionar el doble de cuentas con el mismo tiempo?',
+        'Claude te permite operar en varios idiomas y zonas horarias sin coste adicional',
+        'Automatiza los reportes que te roban horas — y llega con más energía a cerrar ventas'
+      ];
+    } else if (esEspecialista) {
+      perfil = '🧩 La Especialista de Nicho (BP2)';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) + Evolución Continua 197–297€/mes. Si es proactiva, ofrecer primera automatización como upsell inmediato (desde 495€).';
+      tono = 'Empático y preciso. Su miedo es perder la autenticidad — demuéstrale que Claude habla con su voz. Usa ejemplos de su sector. No tecnología, sino impacto en sus clientes.';
+      args = [
+        'Claude puede hablar con tu voz, tu metodología y para tu audiencia — nada suena genérico',
+        'Puedes atender a más clientes sin trabajar más horas — la calidad no baja, sube',
+        'Materiales para clientes que tardaban horas ahora los tienes en minutos'
+      ];
+    } else if (esCreativa || quiereRedes) {
+      perfil = '🎨 La Creativa Desbordada (BP1)';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) + Evolución Continua 197€/mes. Si le preocupan las redes, mencionar el Dashboard de Contenido próximamente.';
+      tono = esEscéptico
+        ? 'Muy cercano y tranquilizador. No explicar la tecnología — mostrar UNA cosa concreta que le quita una carga que odia. Sin jerga. Sin promesas grandes. Un paso pequeño.'
+        : 'Cercano y empático. Hablar de liberación, no de eficiencia. Mostrar antes/después de una tarea que detesta. Simple, visual, concreto.';
+      args = [
+        'Muéstrame una cosa de tu trabajo que odias hacer — en 10 minutos, Claude lo estará haciendo por ti',
+        'Tus redes pueden estar activas sin que tú grabes ni escribas todos los días',
+        'Presupuestos, emails de seguimiento, propuestas — Claude los hace en tu estilo'
+      ];
+    } else {
+      // Default genérico
+      perfil = '👤 Perfil mixto — necesitas más información';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) como entrada. Completa más preguntas para afinar la recomendación.';
+      tono = 'Pregunta qué tarea le quita más tiempo. Esa respuesta te dice todo lo que necesitas saber.';
+      args = [
+        '¿Qué tarea de tu negocio más odias o más tiempo te quita?',
+        'Pregunta si ya usa IA de alguna forma — su respuesta define el punto de partida',
+        'Cuéntale el Kick-Off Day como una jornada, no como software — "en un día, Claude trabaja para ti"'
+      ];
+    }
+
+    // Mostrar resultado
+    document.getElementById('res-titulo').textContent = perfil;
+    document.getElementById('res-sub').textContent = canal
+      ? 'Canal de entrada: ' + { masterclass: 'Masterclass', linkedin: 'LinkedIn', instagram: 'Instagram', referido: 'Referido' }[canal]
+      : 'Selecciona el canal de entrada para más detalle';
+    document.getElementById('res-precio').textContent = ofertaPrecio;
+    document.getElementById('res-oferta-desc').textContent = ofertaDesc;
+    document.getElementById('res-tono').textContent = tono;
+    const ul = document.getElementById('res-argumentos');
+    ul.innerHTML = args.map(a => '<li>' + a + '</li>').join('');
+    document.getElementById('resultado-analizador').classList.add('visible');
+    document.getElementById('resultado-analizador').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 </script>
 </body>
