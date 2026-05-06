@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECCIA Dashboard — Equia</title>
+<style>
+  :root {
+    --azul-osc: #1B3A6B;
+    --azul-med: #2563A8;
+    --azul-clr: #D6E4F7;
+    --azul-xclr: #EFF6FF;
+    --verde: #166534;
+    --verde-clr: #DCFCE7;
+    --ambar: #92400E;
+    --ambar-clr: #FEF3C7;
+    --rojo-clr: #FEE2E2;
+    --gris: #475569;
+    --gris-clr: #F1F5F9;
+    --gris-borde: #CBD5E1;
+    --texto: #1E293B;
+    --blanco: #FFFFFF;
+    --bg: #F0F4FA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--texto); font-size: 14px; }
+
+  /* ── NAV LATERAL ── */
+  .sidebar {
+    position: fixed; top: 0; left: 0; width: 220px; height: 100vh;
+    background: var(--azul-osc); display: flex; flex-direction: column;
+    padding: 0; overflow-y: auto; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .sidebar-logo .brand { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: 1px; }
+  .sidebar-logo .sub { font-size: 11px; color: #93C5FD; margin-top: 2px; }
+  .sidebar-logo .badge {
+    display: inline-block; margin-top: 8px; background: #FEF3C7;
+    color: #92400E; font-size: 10px; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .nav-section { padding: 16px 12px 4px; font-size: 10px; font-weight: 700;
+    color: #64748B; letter-spacing: 1.5px; text-transform: uppercase; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 20px;
+    color: #94A3B8; text-decoration: none; font-size: 13px; cursor: pointer;
+    border-left: 3px solid transparent; transition: all 0.2s;
+  }
+  .nav-item:hover, .nav-item.active {
+    color: #fff; background: rgba(255,255,255,0.08); border-left-color: #60A5FA;
+  }
+  .nav-item .icon { width: 18px; text-align: center; font-size: 15px; }
+  .last-update { padding: 16px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 11px; color: #64748B; }
+
+  /* ── CONTENIDO ── */
+  .main { margin-left: 220px; min-height: 100vh; }
+  .topbar {
+    background: var(--blanco); border-bottom: 1px solid var(--gris-borde);
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-title { font-size: 18px; font-weight: 700; color: var(--azul-osc); }
+  .topbar-date { font-size: 12px; color: var(--gris); }
+  .content { padding: 28px 32px; }
+
+  /* ── SECCIÓN ── */
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-title {
+    font-size: 22px; font-weight: 800; color: var(--azul-osc);
+    margin-bottom: 6px; padding-bottom: 10px;
+    border-bottom: 3px solid var(--azul-med);
+  }
+  .section-sub { font-size: 13px; color: var(--gris); margin-bottom: 24px; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--blanco); border-radius: 12px; padding: 20px 24px;
+    border: 1px solid var(--gris-borde); margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--azul-osc); margin-bottom: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+
+  /* ── STAT BOXES ── */
+  .stat-box {
+    background: var(--blanco); border-radius: 10px; padding: 18px 20px;
+    border: 1px solid var(--gris-borde); text-align: center;
+  }
+  .stat-box .stat-val { font-size: 32px; font-weight: 800; color: var(--azul-med); }
+  .stat-box .stat-label { font-size: 12px; color: var(--gris); margin-top: 4px; }
+  .stat-box.verde .stat-val { color: var(--verde); }
+  .stat-box.ambar .stat-val { color: var(--ambar); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+  }
+  .badge-alta { background: #FEE2E2; color: #991B1B; }
+  .badge-media { background: var(--ambar-clr); color: var(--ambar); }
+  .badge-baja { background: var(--gris-clr); color: var(--gris); }
+  .badge-ok { background: var(--verde-clr); color: var(--verde); }
+  .badge-pendiente { background: var(--ambar-clr); color: var(--ambar); }
+  .badge-inicial { background: var(--azul-clr); color: var(--azul-med); }
+  .badge-mensual { background: #E0E7FF; color: #3730A3; }
+  .badge-promo { background: #FEF3C7; color: #92400E; font-size: 10px; }
+
+  /* ── PRICING ── */
+  .price-card {
+    background: var(--blanco); border-radius: 12px; padding: 24px;
+    border: 2px solid var(--gris-borde); text-align: center; position: relative;
+    transition: border-color 0.2s;
+  }
+  .price-card.featured { border-color: var(--azul-med); }
+  .price-card .price-tag { font-size: 36px; font-weight: 800; color: var(--azul-osc); }
+  .price-card .price-sub { font-size: 12px; color: var(--gris); }
+  .price-card .price-name { font-size: 16px; font-weight: 700; color: var(--azul-med); margin-bottom: 8px; }
+  .price-card .price-regular { font-size: 13px; color: var(--gris); text-decoration: line-through; }
+  .price-card .featured-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--azul-med); color: white; font-size: 10px; font-weight: 700;
+    padding: 3px 12px; border-radius: 20px; white-space: nowrap;
+  }
+  .price-includes { list-style: none; margin-top: 16px; text-align: left; }
+  .price-includes li { padding: 5px 0; font-size: 12px; color: var(--gris); border-bottom: 1px solid var(--gris-clr); }
+  .price-includes li::before { content: "✓ "; color: var(--verde); font-weight: 700; }
+
+  /* ── BUYER PERSONAS ── */
+  .persona-card {
+    background: var(--blanco); border-radius: 12px; border: 1px solid var(--gris-borde);
+    overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .persona-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
+  .persona-avatar {
+    width: 60px; height: 60px; border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; font-size: 26px;
+    flex-shrink: 0;
+  }
+  .persona-header h3 { font-size: 16px; font-weight: 700; color: var(--azul-osc); }
+  .persona-header .role { font-size: 12px; color: var(--gris); margin-top: 2px; }
+  .persona-header .revenue { font-size: 12px; font-weight: 700; color: var(--verde); margin-top: 4px; }
+  .persona-body { padding: 0 24px 20px; }
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px; }
+  .persona-block h4 { font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--azul-med); margin-bottom: 6px; }
+  .persona-block ul { list-style: none; }
+  .persona-block ul li { font-size: 12px; color: var(--gris); padding: 3px 0; }
+  .persona-block ul li::before { content: "• "; color: var(--azul-med); }
+  .persona-channels { padding: 12px 24px; background: var(--gris-clr);
+    display: flex; gap: 8px; align-items: center; }
+  .persona-channels span { font-size: 11px; font-weight: 700; color: var(--gris); }
+
+  /* ── PIPELINE ── */
+  .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .kanban-col { background: var(--gris-clr); border-radius: 10px; padding: 14px; }
+  .kanban-col-title {
+    font-size: 12px; font-weight: 700; color: var(--gris); text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--gris-borde); display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .kanban-count { background: var(--azul-med); color: white; border-radius: 20px;
+    font-size: 10px; padding: 1px 7px; }
+  .kanban-card {
+    background: var(--blanco); border-radius: 8px; padding: 12px 14px;
+    border: 1px solid var(--gris-borde); margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .kanban-card .client-name { font-size: 13px; font-weight: 700; color: var(--azul-osc); }
+  .kanban-card .client-desc { font-size: 11px; color: var(--gris); margin-top: 4px; }
+  .kanban-card .client-revenue { font-size: 11px; font-weight: 700; color: var(--verde); margin-top: 6px; }
+  .kanban-empty { font-size: 12px; color: #94A3B8; text-align: center; padding: 16px 0; }
+
+  /* ── NUC SETUP ── */
+  .progress-bar-wrap { background: #E2E8F0; border-radius: 20px; height: 8px; margin-top: 6px; }
+  .progress-bar { height: 8px; border-radius: 20px; background: var(--azul-med); transition: width 0.4s; }
+  .progress-bar.verde { background: var(--verde); }
+  .setup-category { margin-bottom: 14px; }
+  .setup-cat-header { display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; font-weight: 700; color: var(--azul-osc); margin-bottom: 4px; }
+  .setup-pct { font-size: 12px; color: var(--gris); }
+  .setup-items { margin-top: 10px; }
+  .setup-item { display: flex; align-items: center; gap: 10px; padding: 6px 0;
+    border-bottom: 1px solid var(--gris-clr); font-size: 12px; }
+  .setup-item:last-child { border-bottom: none; }
+  .setup-item .chk {
+    width: 18px; height: 18px; border-radius: 4px; border: 2px solid var(--gris-borde);
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 11px; transition: all 0.2s;
+  }
+  .setup-item.done .chk { background: var(--verde); border-color: var(--verde); color: white; }
+  .setup-item.done .label { text-decoration: line-through; color: var(--gris); }
+  .setup-item .tipo-badge { margin-left: auto; }
+
+  /* ── DOCS ── */
+  .doc-item {
+    display: flex; align-items: center; gap: 14px; padding: 14px 16px;
+    background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 8px;
+    margin-bottom: 10px; transition: border-color 0.2s;
+  }
+  .doc-item:hover { border-color: var(--azul-med); }
+  .doc-icon { font-size: 28px; flex-shrink: 0; }
+  .doc-name { font-size: 13px; font-weight: 700; color: var(--azul-osc); }
+  .doc-desc { font-size: 12px; color: var(--gris); margin-top: 2px; }
+  .doc-date { font-size: 11px; color: var(--gris); margin-left: auto; flex-shrink: 0; text-align:right; }
+  .doc-download {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 6px;
+    padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 700;
+    background: var(--azul-osc); color: white; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .doc-download:hover { background: var(--azul-med); }
+  .doc-download.verde { background: var(--verde); }
+  .doc-download.verde:hover { background: #14532D; }
+  .doc-download.disabled { background: var(--gris-borde); color: var(--gris); cursor: default; pointer-events: none; }
+
+  /* ── CURSO ONLINE ── */
+  .video-item { padding: 12px 0; border-bottom: 1px solid var(--gris-clr); }
+  .video-item:last-child { border-bottom: none; }
+  .video-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+  .video-num { background: var(--azul-osc); color: white; border-radius: 5px; font-size: 11px; font-weight: 700; padding: 2px 8px; flex-shrink: 0; }
+  .video-title { font-size: 13px; font-weight: 700; color: var(--texto); flex: 1; min-width: 160px; }
+  .video-dur { font-size: 11px; color: var(--gris); flex-shrink: 0; }
+  .video-lbl { color: var(--azul-med) !important; font-size: 11px !important; min-width: 100px; flex-shrink: 0; }
+  .badge-demo { background: #FEF3C7; color: #92400E; }
+  .badge-grabado { background: var(--verde-clr); color: var(--verde); cursor: pointer; }
+  .badge-pendiente.clickable, .badge-grabado { cursor: pointer; }
+  #curso .badge-pendiente { cursor: pointer; }
+
+  /* ── GUION EXPANDIBLE ── */
+  .guion-toggle-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin-top: 10px; padding: 5px 14px;
+    background: var(--azul-xclr); color: var(--azul-med);
+    border: 1px solid var(--azul-clr); border-radius: 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  }
+  .guion-toggle-btn:hover { background: var(--azul-clr); }
+  .guion-content { margin-top: 14px; border-top: 2px dashed var(--azul-clr); padding-top: 14px; }
+  .guion-ruta {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+    background: var(--azul-xclr); border-left: 4px solid var(--azul-med);
+    padding: 10px 14px; border-radius: 0 8px 8px 0; margin-bottom: 12px;
+  }
+  .guion-ruta-label { font-size: 11px; font-weight: 700; color: var(--azul-med); margin-right: 2px; }
+  .guion-step { background: var(--blanco); border: 1px solid var(--azul-clr); border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 700; color: var(--azul-osc); }
+  .guion-arrow { color: var(--azul-med); font-size: 12px; font-weight: 700; }
+  .guion-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .guion-col { border-radius: 8px; overflow: hidden; }
+  .guion-col-title { padding: 8px 12px; font-size: 11px; font-weight: 700; color: white; }
+  .guion-intro .guion-col-title { background: var(--azul-osc); }
+  .guion-desarrollo .guion-col-title { background: var(--azul-med); }
+  .guion-cierre .guion-col-title { background: #92400E; }
+  .guion-col-body { padding: 10px 12px; font-size: 12px; color: var(--gris); background: var(--gris-clr); line-height: 1.6; }
+  .guion-cierre .guion-col-body { background: #FEF3C7; color: #92400E; font-style: italic; }
+  @media (max-width: 900px) { .guion-grid { grid-template-columns: 1fr; } }
+
+  /* ── PRÓXIMOS PASOS ── */
+  .task-item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;
+    background: var(--blanco); border: 1px solid var(--gris-borde); border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .task-item .task-dot { width: 10px; height: 10px; border-radius: 50%;
+    margin-top: 3px; flex-shrink: 0; }
+  .task-item .dot-alta { background: #EF4444; }
+  .task-item .dot-media { background: #F59E0B; }
+  .task-item .dot-baja { background: #94A3B8; }
+  .task-item .task-text { font-size: 13px; color: var(--texto); flex: 1; }
+  .task-item .task-owner {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .owner-maria { background: #E0E7FF; color: #3730A3; }
+  .owner-cindy { background: #FCE7F3; color: #9D174D; }
+  .owner-ambas { background: var(--verde-clr); color: var(--verde); }
+
+  /* ── REDES SOCIALES ── */
+  .social-card {
+    background: var(--blanco); border-radius: 12px; padding: 20px 24px;
+    border: 1px solid var(--gris-borde);
+  }
+  .social-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .social-icon { font-size: 32px; }
+  .social-header h3 { font-size: 16px; font-weight: 700; color: var(--azul-osc); }
+  .social-header .handle { font-size: 13px; color: var(--azul-med); }
+  .content-idea {
+    background: var(--gris-clr); border-radius: 8px; padding: 10px 14px;
+    margin-bottom: 8px; font-size: 12px; color: var(--gris);
+    border-left: 3px solid var(--azul-med);
+  }
+  .content-idea strong { color: var(--texto); }
+
+  /* ── RESUMEN OVERVIEW ── */
+  .overview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .info-row { display: flex; justify-content: space-between; padding: 8px 0;
+    border-bottom: 1px solid var(--gris-clr); font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-label { color: var(--gris); font-weight: 600; }
+  .info-val { color: var(--texto); font-weight: 700; }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 600; background: var(--azul-clr); color: var(--azul-med); margin: 2px; }
+
+  @media (max-width: 900px) {
+    .sidebar { width: 60px; }
+    .sidebar-logo .brand, .sidebar-logo .sub, .sidebar-logo .badge,
+    .nav-section, .nav-item span, .last-update { display: none; }
+    .main { margin-left: 60px; }
+    .kanban { grid-template-columns: 1fr 1fr; }
+    .grid-2, .grid-3, .overview-grid { grid-template-columns: 1fr; }
+    .persona-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════ SIDEBAR ════════ -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">EQUIA</div>
+    <div class="sub">empresarioscrecenconia.es</div>
+    <div class="badge">⭐ Primeros 4 clientes</div>
+  </div>
+
+  <div class="nav-section">Proyecto</div>
+  <a class="nav-item active" onclick="showSection('overview')">
+    <span class="icon">🏠</span><span>Resumen</span>
+  </a>
+  <a class="nav-item" onclick="showSection('modelo')">
+    <span class="icon">💼</span><span>Modelo de Negocio</span>
+  </a>
+  <a class="nav-item" onclick="showSection('personas')">
+    <span class="icon">👤</span><span>Buyer Personas</span>
+  </a>
+  <a class="nav-item" onclick="showSection('pipeline')">
+    <span class="icon">🎯</span><span>Pipeline Clientes</span>
+  </a>
+  <a class="nav-item" onclick="showSection('redes')">
+    <span class="icon">📱</span><span>Redes Sociales</span>
+  </a>
+
+  <div class="nav-section">Operaciones</div>
+  <a class="nav-item" onclick="showSection('nuc')">
+    <span class="icon">🖥️</span><span>Setup NUC</span>
+  </a>
+  <a class="nav-item" onclick="showSection('docs')">
+    <span class="icon">📄</span><span>Documentos</span>
+  </a>
+  <a class="nav-item" onclick="showSection('pasos')">
+    <span class="icon">✅</span><span>Próximos Pasos</span>
+  </a>
+  <a class="nav-item" onclick="showSection('curso')">
+    <span class="icon">🎓</span><span>Curso Online</span>
+  </a>
+
+  <div class="last-update">Actualizado: 05/05/2026</div>
+</nav>
+
+<!-- ════════ MAIN ════════ -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Resumen del Proyecto</div>
+    <div class="topbar-date">05 de mayo de 2026</div>
+  </div>
+  <div class="content">
+
+    <!-- ══ OVERVIEW ══ -->
+    <div class="section active" id="overview">
+      <div class="section-title">Vista General</div>
+      <div class="section-sub">Estado actual del proyecto ECCIA — Equia</div>
+
+      <div class="overview-grid">
+        <div class="stat-box">
+          <div class="stat-val">4</div>
+          <div class="stat-label">Clientes objetivo<br>oferta inicial</div>
+        </div>
+        <div class="stat-box verde">
+          <div class="stat-val">895€</div>
+          <div class="stat-label">Claude Kick-Off Day<br>(promo)</div>
+        </div>
+        <div class="stat-box verde">
+          <div class="stat-val">197€</div>
+          <div class="stat-label">Evolución Continua<br>/ mes (promo)</div>
+        </div>
+        <div class="stat-box ambar">
+          <div class="stat-val">0/4</div>
+          <div class="stat-label">Clientes activos<br>actualmente</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📌 Stack Tecnológico</div>
+          <div class="info-row"><span class="info-label">Cerebro (IA)</span><span class="info-val">Claude (Anthropic)</span></div>
+          <div class="info-row"><span class="info-label">Orquestación</span><span class="info-val">N8N (self-hosted, gratuito)</span></div>
+          <div class="info-row"><span class="info-label">Infraestructura</span><span class="info-val">NUC mini-PC 24/7</span></div>
+          <div class="info-row"><span class="info-label">NUC recomendado</span><span class="info-val">Beelink EQ12 / EQ14</span></div>
+          <div class="info-row"><span class="info-label">RAM mínima</span><span class="info-val">8 GB DDR4</span></div>
+          <div class="info-row"><span class="info-label">Almacenamiento</span><span class="info-val">256 GB NVMe SSD</span></div>
+          <div class="info-row"><span class="info-label">Coste electricidad</span><span class="info-val">~1–3 €/mes</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">🎯 Segmentos Objetivo</div>
+          <div class="info-row"><span class="info-label">Pymes</span><span class="info-val">Ingresos ≥ 1 M€</span></div>
+          <div class="info-row"><span class="info-label">Solopreneurs</span><span class="info-val">Ingresos 30k–150k€</span></div>
+          <div class="info-row"><span class="info-label">Lead identificado 1</span><span class="info-val">Empresa de Carlos (~6M€)</span></div>
+          <div class="info-row"><span class="info-label">Lead identificado 2</span><span class="info-val">Human CTA (agencia marketing)</span></div>
+          <div class="info-row"><span class="info-label">Canal principal</span><span class="info-val">LinkedIn + Masterclasses</span></div>
+          <div class="info-row"><span class="info-label">Marca</span><span class="info-val">Agnóstica al modelo IA</span></div>
+          <div class="info-row"><span class="info-label">Dominio</span><span class="info-val">empresarioscrecenconia.es</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">⚡ Estado del Proyecto</div>
+        <div class="setup-items">
+          <div class="setup-item done"><div class="chk">✓</div><span class="label">Modelo de negocio definido</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
+          <div class="setup-item done"><div class="chk">✓</div><span class="label">Precios establecidos</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
+          <div class="setup-item done"><div class="chk">✓</div><span class="label">Presupuesto base creado</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
+          <div class="setup-item done"><div class="chk">✓</div><span class="label">Buyer Personas definidas</span><span class="tipo-badge badge badge-ok">Hecho</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Setup NUC completado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Perfil LinkedIn creado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Perfil Instagram creado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Primer cliente activo</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Curso Claude Kick-Off Day grabado</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Masterclass realizada</span><span class="tipo-badge badge badge-pendiente">Pendiente</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ MODELO DE NEGOCIO ══ -->
+    <div class="section" id="modelo">
+      <div class="section-title">Modelo de Negocio</div>
+      <div class="section-sub">Estructura de servicios y precios — Oferta primeros 4 clientes</div>
+
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="price-card featured">
+          <div class="featured-badge">⭐ Core Service</div>
+          <div class="price-name">Claude Kick-Off Day</div>
+          <div class="price-tag">895€</div>
+          <div class="price-sub">+ IVA · Pago único</div>
+          <div class="price-regular">Precio estándar: 2.500€ + IVA</div>
+          <ul class="price-includes">
+            <li>Análisis del negocio y mapa de automatizaciones</li>
+            <li>Configuración Claude con memoria y skills</li>
+            <li>Hasta 3 flujos N8N implementados</li>
+            <li>Integración con servidor NUC 24/7</li>
+            <li>Formación básica al equipo</li>
+            <li>Curso "Claude Kick-Off Day" incluido (val. 69€)</li>
+          </ul>
+        </div>
+        <div class="price-card featured">
+          <div class="featured-badge">🔄 Recurrente</div>
+          <div class="price-name">Evolución Continua</div>
+          <div class="price-tag">197€</div>
+          <div class="price-sub">+ IVA · Mensual · Mín. 3 meses</div>
+          <div class="price-regular">Precio estándar: 297€/mes + IVA</div>
+          <ul class="price-includes">
+            <li>Monitorización proactiva de automatizaciones</li>
+            <li>Actualizaciones ante cambios del modelo Claude</li>
+            <li>Hasta 2h de mejoras mensuales incluidas</li>
+            <li>Revisión trimestral de rendimiento</li>
+            <li>Soporte en 24h laborables</li>
+            <li>Gestión de seguridad del servidor NUC</li>
+          </ul>
+        </div>
+        <div class="price-card">
+          <div class="price-name">Nueva Automatización</div>
+          <div class="price-tag" style="font-size:28px;">desde 495€</div>
+          <div class="price-sub">+ IVA · Pago único por flujo</div>
+          <div class="price-regular">&nbsp;</div>
+          <ul class="price-includes">
+            <li>Flujo simple (integración directa): desde 495€</li>
+            <li>Flujo avanzado (multi-sistema): desde 895€</li>
+            <li>Presupuesto independiente por automatización</li>
+            <li>Diseño + implementación + pruebas</li>
+            <li>Documentación del flujo incluida</li>
+            <li>Integración con infraestructura existente</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">💡 Principios del Modelo</div>
+        <div class="grid-2">
+          <div>
+            <div class="info-row"><span class="info-label">Enfoque de pricing</span><span class="info-val">Basado en valor (resultados), no en horas</span></div>
+            <div class="info-row"><span class="info-label">Referencia de valor</span><span class="info-val">Sustituir el trabajo de una persona</span></div>
+            <div class="info-row"><span class="info-label">Tarifa objetivo/día</span><span class="info-val">800–1.000 €/día trabajo experto</span></div>
+          </div>
+          <div>
+            <div class="info-row"><span class="info-label">Cuota mensual = </span><span class="info-val">Evolución, no mantenimiento</span></div>
+            <div class="info-row"><span class="info-label">Coste seguridad NUC</span><span class="info-val">~0–5 €/mes (software open source)</span></div>
+            <div class="info-row"><span class="info-label">Total 1er trimestre</span><span class="info-val">1.798,06 € con IVA</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📚 Productos de Contenido</div>
+        <div class="grid-2">
+          <div>
+            <div class="info-row"><span class="info-label">Curso online</span><span class="info-val">Claude Kick-Off Day (incluido en servicio)</span></div>
+            <div class="info-row"><span class="info-label">Plataforma</span><span class="info-val">A Players Academy (EnSchool)</span></div>
+            <div class="info-row"><span class="info-label">Herramienta grabación</span><span class="info-val">Loom</span></div>
+            <div class="info-row"><span class="info-label">Formato módulos</span><span class="info-val">Videos 3–15 min</span></div>
+          </div>
+          <div>
+            <div class="info-row"><span class="info-label">Masterclass (separada)</span><span class="info-val">Grabación sola: 27 € · Con skills: 69 €</span></div>
+            <div class="info-row"><span class="info-label">Próxima masterclass</span><span class="info-val">Miércoles (pendiente fecha)</span></div>
+            <div class="info-row"><span class="info-label">Leads masterclass</span><span class="info-val">LinkedIn (Cindy)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BUYER PERSONAS ══ -->
+    <div class="section" id="personas">
+      <div class="section-title">Buyer Personas</div>
+      <div class="section-sub">Perfiles de cliente ideal para enfocar captación y comunicación</div>
+
+      <div class="grid-2">
+        <!-- Persona 1 -->
+        <div class="persona-card">
+          <div class="persona-header" style="background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);">
+            <div class="persona-avatar" style="background: #DBEAFE; color: #1D4ED8;">👔</div>
+            <div>
+              <h3>Carlos — El Empresario Pyme</h3>
+              <div class="role">Propietario / CEO · Empresa establecida</div>
+              <div class="revenue">Facturación: 1 M€ – 10 M€ anuales</div>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-grid">
+              <div class="persona-block">
+                <h4>🎯 Objetivos</h4>
+                <ul>
+                  <li>Reducir tareas manuales repetitivas</li>
+                  <li>Escalar sin aumentar plantilla</li>
+                  <li>Tomar decisiones con más datos</li>
+                  <li>Competir con empresas más grandes</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>😤 Frustraciones</h4>
+                <ul>
+                  <li>Su equipo (3–10 personas) está saturado</li>
+                  <li>Siente que la IA es "para grandes empresas"</li>
+                  <li>No sabe por dónde empezar</li>
+                  <li>Ha intentado herramientas y las ha abandonado</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>💬 Qué dice</h4>
+                <ul>
+                  <li>"Necesito que mi gente haga más con lo mismo"</li>
+                  <li>"No tengo tiempo para aprender tecnología"</li>
+                  <li>"Quiero resultados, no experimentos"</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>✨ Cómo le ayuda Equia</h4>
+                <ul>
+                  <li>Automatiza procesos sin necesidad técnica</li>
+                  <li>ROI tangible desde el primer mes</li>
+                  <li>Nosotros gestionamos todo el stack</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="persona-channels">
+            <span>Canales:</span>
+            <span class="badge badge-inicial">LinkedIn</span>
+            <span class="badge badge-mensual">Referidos</span>
+            <span class="badge badge-inicial">Masterclasses</span>
+          </div>
+        </div>
+
+        <!-- Persona 2 -->
+        <div class="persona-card">
+          <div class="persona-header" style="background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);">
+            <div class="persona-avatar" style="background: #DCFCE7; color: #166534;">💻</div>
+            <div>
+              <h3>Sara — La Solopreneur Digital</h3>
+              <div class="role">Freelance / Consultora / Creadora de contenido</div>
+              <div class="revenue">Facturación: 30.000 € – 150.000 € anuales</div>
+            </div>
+          </div>
+          <div class="persona-body">
+            <div class="persona-grid">
+              <div class="persona-block">
+                <h4>🎯 Objetivos</h4>
+                <ul>
+                  <li>Multiplicar su capacidad productiva</li>
+                  <li>Generar ingresos mientras "duerme"</li>
+                  <li>Profesionalizar su operativa</li>
+                  <li>Dedicar tiempo a lo que realmente importa</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>😤 Frustraciones</h4>
+                <ul>
+                  <li>Todo recae sobre ella, no puede descansar</li>
+                  <li>Pierde tiempo en gestiones administrativas</li>
+                  <li>Le cuesta delegar (no tiene equipo)</li>
+                  <li>Usa 10+ herramientas desconectadas entre sí</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>💬 Qué dice</h4>
+                <ul>
+                  <li>"Soy yo quien hace todo y es agotador"</li>
+                  <li>"Uso IA pero de forma básica, no sé más"</li>
+                  <li>"Quiero escalar sin perder calidad"</li>
+                </ul>
+              </div>
+              <div class="persona-block">
+                <h4>✨ Cómo le ayuda Equia</h4>
+                <ul>
+                  <li>Claude como asistente personal 24/7</li>
+                  <li>Automatiza su back-office completo</li>
+                  <li>Ticket de entrada accesible (895€)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="persona-channels">
+            <span>Canales:</span>
+            <span class="badge badge-mensual">Instagram</span>
+            <span class="badge badge-inicial">LinkedIn</span>
+            <span class="badge badge-inicial">Masterclasses</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title">🔑 Mensaje Clave por Persona</div>
+        <div class="grid-2">
+          <div>
+            <div style="font-weight:700; color:var(--azul-osc); margin-bottom:8px;">Para Carlos (Pyme):</div>
+            <div style="font-size:13px; color:var(--gris); font-style:italic; background:var(--azul-xclr); padding:12px; border-radius:8px;">
+              "Tu equipo de 3 personas puede rendir como uno de 6. Sin contratar a nadie. En 30 días."
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:700; color:var(--azul-osc); margin-bottom:8px;">Para Sara (Solopreneur):</div>
+            <div style="font-size:13px; color:var(--gris); font-style:italic; background:var(--verde-clr); padding:12px; border-radius:8px;">
+              "Para de hacer tú todo. Hay tareas que Claude puede hacer mientras duermes — y mejor que tú en algunas de ellas."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PIPELINE ══ -->
+    <div class="section" id="pipeline">
+      <div class="section-title">Pipeline de Clientes</div>
+      <div class="section-sub">Estado actual de captación — Oferta limitada a 4 clientes</div>
+
+      <div class="kanban">
+        <div class="kanban-col">
+          <div class="kanban-col-title">Identificado <span class="kanban-count">2</span></div>
+          <div class="kanban-card">
+            <div class="client-name">Empresa de Carlos</div>
+            <div class="client-desc">Pyme · 3 empleados · Interesada en Claude</div>
+            <div class="client-revenue">~6 M€ facturación</div>
+          </div>
+          <div class="kanban-card">
+            <div class="client-name">Human CTA</div>
+            <div class="client-desc">Agencia marketing cooperativas · 3 empleados</div>
+            <div class="client-revenue">Asisten próxima masterclass</div>
+          </div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-title">En Conversación <span class="kanban-count">0</span></div>
+          <div class="kanban-empty">Sin leads en esta fase</div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-title">Presupuesto Enviado <span class="kanban-count">0</span></div>
+          <div class="kanban-empty">Sin leads en esta fase</div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-col-title">Cliente Activo <span class="kanban-count">0</span></div>
+          <div class="kanban-empty">0 de 4 plazas ocupadas</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title">📊 Proyección Ingresos (4 clientes)</div>
+        <div class="grid-3">
+          <div class="stat-box">
+            <div class="stat-val" style="font-size:24px;">3.580€</div>
+            <div class="stat-label">Ingresos Kick-Off Day<br>(4 clientes × 895€)</div>
+          </div>
+          <div class="stat-box verde">
+            <div class="stat-val" style="font-size:24px;">788€/mes</div>
+            <div class="stat-label">Ingresos recurrentes<br>(4 clientes × 197€)</div>
+          </div>
+          <div class="stat-box ambar">
+            <div class="stat-val" style="font-size:24px;">13.036€</div>
+            <div class="stat-label">Total año 1<br>(setup + 12 meses)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REDES SOCIALES ══ -->
+    <div class="section" id="redes">
+      <div class="section-title">Estrategia Redes Sociales</div>
+      <div class="section-sub">Plan de contenido para LinkedIn e Instagram</div>
+
+      <div class="grid-2">
+        <div class="social-card">
+          <div class="social-header">
+            <div class="social-icon">💼</div>
+            <div>
+              <h3>LinkedIn</h3>
+              <div class="handle">@equia · empresarioscrecenconia</div>
+              <span class="badge badge-pendiente">Perfil por crear</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--gris); margin-bottom:12px;"><strong>Audiencia principal:</strong> Carlos (Pymes, CEOs, directivos) · B2B</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Casos de uso reales de automatización con IA en pymes españolas</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> "Esto que tardabas 3h ahora lo hace Claude en 4 minutos" (con vídeo demostración)</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Tips de productividad con Claude para equipos pequeños</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Anuncio y captación de leads para masterclasses</div>
+          <div class="content-idea"><strong>Frecuencia recomendada:</strong> 3–4 publicaciones / semana</div>
+        </div>
+        <div class="social-card">
+          <div class="social-header">
+            <div class="social-icon">📸</div>
+            <div>
+              <h3>Instagram</h3>
+              <div class="handle">@equia · empresarioscrecenconia</div>
+              <span class="badge badge-pendiente">Perfil por crear</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--gris); margin-bottom:12px;"><strong>Audiencia principal:</strong> Sara (Solopreneurs, freelancers, creadores) · B2C</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Reels cortos: "Un prompt de Claude que me ahorró 2 horas hoy"</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Carruseles: "5 cosas que ya no hago yo — las hace Claude"</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Stories: detrás de escenas, proceso de trabajo con IA</div>
+          <div class="content-idea"><strong>Tipo de contenido:</strong> Testimonio de cliente (cuando lleguen los primeros)</div>
+          <div class="content-idea"><strong>Frecuencia recomendada:</strong> 4–5 publicaciones / semana · Stories diarias</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title">📅 Próximas acciones en Redes</div>
+        <div class="setup-items">
+          <div class="setup-item"><div class="chk"></div><span class="label">Crear perfil LinkedIn Equia</span><span class="tipo-badge badge badge-alta">Alta prioridad</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Crear perfil Instagram Equia</span><span class="tipo-badge badge badge-alta">Alta prioridad</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Definir bio y descripción de cada perfil</span><span class="tipo-badge badge badge-media">Media</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Publicar primer post de presentación en LinkedIn</span><span class="tipo-badge badge badge-media">Media</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Grabar primer Reel para Instagram</span><span class="tipo-badge badge badge-media">Media</span></div>
+          <div class="setup-item"><div class="chk"></div><span class="label">Crear plantilla visual de posts (Canva)</span><span class="tipo-badge badge badge-baja">Baja</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NUC SETUP ══ -->
+    <div class="section" id="nuc">
+      <div class="section-title">Setup NUC</div>
+      <div class="section-sub">Progreso de configuración y seguridad del servidor</div>
+
+      <div class="grid-2" style="margin-bottom:20px;">
+        <div class="card">
+          <div class="card-title">🖥️ Hardware seleccionado</div>
+          <div class="info-row"><span class="info-label">Modelo (recomendado)</span><span class="info-val">Beelink EQ12 o EQ14</span></div>
+          <div class="info-row"><span class="info-label">Procesador</span><span class="info-val">Intel N100 / N150</span></div>
+          <div class="info-row"><span class="info-label">RAM</span><span class="info-val">16 GB DDR4</span></div>
+          <div class="info-row"><span class="info-label">Almacenamiento</span><span class="info-val">500 GB NVMe SSD</span></div>
+          <div class="info-row"><span class="info-label">Consumo en reposo</span><span class="info-val">6–10 W</span></div>
+          <div class="info-row"><span class="info-label">Precio estimado</span><span class="info-val">150–200 € (Amazon España)</span></div>
+          <div class="info-row"><span class="info-label">Estado</span><span><span class="badge badge-pendiente">Por adquirir</span></span></div>
+        </div>
+        <div class="card">
+          <div class="card-title">💶 Costes mensuales del servidor</div>
+          <div class="info-row"><span class="info-label">Software seguridad</span><span class="info-val" style="color:var(--verde);">0 € (open source)</span></div>
+          <div class="info-row"><span class="info-label">N8N (self-hosted)</span><span class="info-val" style="color:var(--verde);">0 € (gratuito)</span></div>
+          <div class="info-row"><span class="info-label">Backup almacenamiento</span><span class="info-val">0–5 €/mes</span></div>
+          <div class="info-row"><span class="info-label">Electricidad (24/7)</span><span class="info-val">1–3 €/mes</span></div>
+          <div class="info-row"><span class="info-label">SSL (Caddy)</span><span class="info-val" style="color:var(--verde);">0 € (auto)</span></div>
+          <div class="info-row"><span class="info-label"><strong>Total mensual</strong></span><span class="info-val" style="color:var(--verde);font-weight:800;">~2–8 €/mes</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔒 Progreso de Seguridad</div>
+
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>SO & Sistema Base</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>Firewall (UFW)</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>Acceso SSH</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>N8N & Automatizaciones</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>Backups</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div class="setup-category">
+          <div class="setup-cat-header"><span>Monitorización</span><span class="setup-pct">0%</span></div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:0%"></div></div>
+        </div>
+        <div style="margin-top:12px; font-size:12px; color:var(--gris);">
+          📋 Ver checklist completa en: <strong>Checklist_Seguridad_NUC_Eccia.xlsx</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DOCUMENTOS ══ -->
+    <div class="section" id="docs">
+      <div class="section-title">Documentos</div>
+      <div class="section-sub">Archivos generados del proyecto</div>
+
+      <div class="doc-item">
+        <div class="doc-icon">📋</div>
+        <div>
+          <div class="doc-name">Acta de Reunión — Modelo de Negocio</div>
+          <div class="doc-desc">Definición del modelo, precios, stack tecnológico, clientes potenciales y próximos pasos</div>
+          <a class="doc-download verde" href="acta_reunion.docx" download>⬇ Descargar .docx</a>
+        </div>
+        <div class="doc-date">05/05/2026<br><span class="badge badge-ok">Entregado</span></div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">💼</div>
+        <div>
+          <div class="doc-name">Presupuesto_Equia_ECQ-2026-001.docx</div>
+          <div class="doc-desc">Presupuesto completo para primeros 4 clientes — Claude Kick-Off Day + Evolución Continua</div>
+          <a class="doc-download verde" href="Presupuesto_Equia_ECQ-2026-001.docx" download>⬇ Descargar .docx</a>
+        </div>
+        <div class="doc-date">05/05/2026<br><span class="badge badge-ok">Entregado</span></div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">🔒</div>
+        <div>
+          <div class="doc-name">Checklist_Seguridad_NUC_Eccia.xlsx</div>
+          <div class="doc-desc">32 tareas de hardening del NUC + análisis de costes por escenario (María gestionada vs. IT externo)</div>
+          <a class="doc-download verde" href="Checklist_Seguridad_NUC_Eccia.xlsx" download>⬇ Descargar .xlsx</a>
+        </div>
+        <div class="doc-date">05/05/2026<br><span class="badge badge-ok">Entregado</span></div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">🎓</div>
+        <div>
+          <div class="doc-name">Guion_Produccion_Curso_Claude.docx</div>
+          <div class="doc-desc">Guion orientativo con rutas de navegación, estructura Intro/Desarrollo/CTA para los 15 videos del curso</div>
+          <a class="doc-download verde" href="Guion_Produccion_Curso_Claude.docx" download>⬇ Descargar .docx</a>
+        </div>
+        <div class="doc-date">06/05/2026<br><span class="badge badge-ok">Entregado</span></div>
+      </div>
+      <div class="doc-item" style="border-style:dashed; opacity:0.6;">
+        <div class="doc-icon">📄</div>
+        <div>
+          <div class="doc-name">Contrato de Servicios</div>
+          <div class="doc-desc">Términos y condiciones, RGPD, SLA — por crear</div>
+          <a class="doc-download disabled" href="#">⬇ Próximamente</a>
+        </div>
+        <div class="doc-date"><span class="badge badge-pendiente">Pendiente</span></div>
+      </div>
+      <div class="doc-item" style="border-style:dashed; opacity:0.6;">
+        <div class="doc-icon">📊</div>
+        <div>
+          <div class="doc-name">Informe de Onboarding (por cliente)</div>
+          <div class="doc-desc">Plantilla de entrega al finalizar el Kick-Off Day — por crear</div>
+          <a class="doc-download disabled" href="#">⬇ Próximamente</a>
+        </div>
+        <div class="doc-date"><span class="badge badge-pendiente">Pendiente</span></div>
+      </div>
+    </div>
+
+    <!-- ══ PRÓXIMOS PASOS ══ -->
+    <div class="section" id="pasos">
+      <div class="section-title">Próximos Pasos</div>
+      <div class="section-sub">Tareas pendientes por responsable</div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color:#3730A3;">🟣 María</div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Adquirir NUC (Beelink EQ12/EQ14 recomendado)</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Crear perfil LinkedIn Equia con Claude</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Crear perfil Instagram Equia</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Grabar módulos del curso en Loom</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Estructurar curso en A Players Academy</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Setup completo del NUC (con Claude paso a paso)</div><span class="task-owner owner-maria">María</span></div>
+          <div class="task-item"><div class="task-dot dot-baja"></div><div class="task-text">Abrir cuenta GitHub + subir este dashboard</div><span class="task-owner owner-maria">María</span></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:#9D174D;">🩷 Cindy</div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Dar credenciales Loom y A Players Academy a María</div><span class="task-owner owner-cindy">Cindy</span></div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Continuar generación de leads en LinkedIn para masterclass</div><span class="task-owner owner-cindy">Cindy</span></div>
+          <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Redactar plan de negocio (basado en transcripción reunión)</div><span class="task-owner owner-cindy">Cindy</span></div>
+          <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Preparar materiales para la masterclass del miércoles</div><span class="task-owner owner-cindy">Cindy</span></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:4px;">
+        <div class="card-title" style="color:var(--verde);">🤝 Ambas</div>
+        <div class="task-item"><div class="task-dot dot-alta"></div><div class="task-text">Reunirse antes de la masterclass del miércoles para ultimar detalles</div><span class="task-owner owner-ambas">Ambas</span></div>
+        <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Definir guion y argumentario de ventas para primeras reuniones con leads</div><span class="task-owner owner-ambas">Ambas</span></div>
+        <div class="task-item"><div class="task-dot dot-media"></div><div class="task-text">Agendar primera demo con empresa de Carlos</div><span class="task-owner owner-ambas">Ambas</span></div>
+      </div>
+    </div>
+
+    <!-- ══ CURSO ONLINE ══ -->
+    <div class="section" id="curso">
+      <div class="section-title">Curso Online — Guion de Producción</div>
+      <div class="section-sub">Claude Kick-Off Day · 15 videos · ~100 min · A Players Academy · Grabación con Loom</div>
+
+      <div class="overview-grid" style="margin-bottom:24px;">
+        <div class="stat-box"><div class="stat-val">15</div><div class="stat-label">Videos totales</div></div>
+        <div class="stat-box ambar" id="grabados-box"><div class="stat-val" id="grabados-count">0/15</div><div class="stat-label">Grabados</div></div>
+        <div class="stat-box"><div class="stat-val">9</div><div class="stat-label">Demos en vivo</div></div>
+        <div class="stat-box verde"><div class="stat-val">~100 min</div><div class="stat-label">Duración total est.</div></div>
+      </div>
+
+      <!-- MÓDULO 0 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">📋 Módulo 0 — Bienvenida &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">1 video · ~5 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">0.1</span>
+            <span class="video-title">Bienvenida al curso: qué vas a aprender y cómo usarlo</span>
+            <span class="video-dur">~5 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno entiende la promesa del curso y cómo sacarle el máximo partido a cada módulo</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Quién es Cindy y por qué Claude · Qué aprenderás en cada módulo · Cómo navegar la plataforma</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Empieza el Módulo 1 cuando estés listo — te vas a sorprender"</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 1 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">🤔 Módulo 1 — Por qué Claude y no ChatGPT &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">2 videos · ~12 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">1.1</span>
+            <span class="video-title">Las 4 limitaciones de ChatGPT que frenan tu negocio</span>
+            <span class="video-dur">~5-7 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno identifica por qué ChatGPT no es suficiente para resultados empresariales reales</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Salida genérica y repetitiva · Memoria deficiente en conversaciones largas · Alucinaciones · GPTs en silos que no se comunican</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"En el siguiente video te presento la alternativa que lo cambia todo"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">1.2</span>
+            <span class="video-title">Por qué Claude es superior para resultados empresariales</span>
+            <span class="video-dur">~5-7 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno conoce las ventajas diferenciales de Claude y entiende por qué es la herramienta correcta</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Razonamiento superior · Documentos con maquetación profesional · Apps HTML interactivas · Flujos de trabajo sistémicos multi-paso</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Ahora que sabes el porqué, vamos a configurarlo juntos paso a paso"</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 2 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">⚙️ Módulo 2 — Configuración Inicial &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">3 videos · ~17 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">2.1</span>
+            <span class="video-title">Planes y app de escritorio: qué necesitas para empezar</span>
+            <span class="video-dur">~5 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno sabe qué plan necesita y por qué la app de escritorio desbloquea funciones clave</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Free vs Pro (20 $/mes) · Funciones exclusivas de la app de escritorio · Proyectos Co-work · Automatización del navegador</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Activa tu plan Pro antes del siguiente video — lo necesitarás para seguirlo en directo"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">2.2</span>
+            <span class="video-title">Elegir el modelo correcto: Opus, Sonnet o Haiku</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~5 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno sabe qué modelo elegir según la tarea para optimizar calidad y consumo de créditos</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Opus 4 — razonamiento profundo, consume créditos rápido · Sonnet 4.6 — uso diario eficiente · Haiku 4.5 — consultas simples y velocidad</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Perfecto. Ahora vamos a traer todo tu historial de ChatGPT directamente a Claude"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">2.3</span>
+            <span class="video-title">Importar tu memoria de ChatGPT a Claude en 5 minutos</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~7 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno transfiere su base de conocimiento de ChatGPT a Claude sin perder nada relevante</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Settings → Capabilities → Iniciar Importación · Copiar prompt en ChatGPT · Pegar el resumen de vuelta en Claude</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Ya tienes Claude con tu contexto. Ahora lo hacemos verdaderamente tuyo con las Skills"</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 3 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">⚡ Módulo 3 — Skills: Tu Ventaja Diferencial &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">3 videos · ~20 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">3.1</span>
+            <span class="video-title">Qué son las Skills y por qué te cambian el juego</span>
+            <span class="video-dur">~5 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno entiende qué es una Skill y por qué convierte a Claude en un asistente verdaderamente especializado</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Skill vs prompt genérico — la diferencia clave · Tu metodología entrenada en la IA · Resultados consistentes con tu voz de marca</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Vamos a crear tu primera Skill ahora mismo — en vivo"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">3.2</span>
+            <span class="video-title">Cómo crear tu primer Skill con tu voz y metodología</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~8-10 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno crea su propia Skill funcional durante el video y la guarda lista para usar</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">El prompt clave: "Hazme preguntas para crear el skill perfecto" · Proceso iterativo con Claude · Exportar la Skill terminada</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Guarda tu Skill. En el siguiente video aprendemos a gestionarla como un activo reutilizable"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">3.3</span>
+            <span class="video-title">Exportar, importar y compartir Skills (.md)</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~5 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno sabe gestionar sus Skills como activos reutilizables y compartirlos con equipo o clientes</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Guardar como archivo .md (Markdown) · Importar en otros proyectos de Claude · Compartir con clientes o miembros del equipo</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Perfecto. Ahora conectamos Claude con tus aplicaciones favoritas en el Módulo 4"</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 4 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">🔌 Módulo 4 — Conectores &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">1 video · ~7 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">4.1</span>
+            <span class="video-title">Conectores: Claude conectado a Gmail, Drive, Notion y más</span>
+            <span class="video-dur">~7 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno sabe qué conectores existen, cómo activarlos y en qué situaciones usarlos</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Conectores disponibles: Gmail, Drive, Notion · Proceso de conexión paso a paso · Casos de uso por aplicación</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Claude ya está conectado a tu ecosistema. Ahora lo aplicamos a los pilares de tu negocio"</span></div>
+        </div>
+      </div>
+
+      <!-- MÓDULO 5 -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title">🚀 Módulo 5 — Los Pilares del Negocio &nbsp;<span style="font-weight:400;color:var(--gris);font-size:12px;">5 videos · ~44 min</span></div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">5.1</span>
+            <span class="video-title">Mensajería: Crea tu Skill de guía de marca</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~8 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno crea una Skill que garantiza que Claude siempre use su tono, colores y estilo de marca</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Definir tono, colores y formato · Claude como guardián consistente de tu marca · Ejemplo real antes/después</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Tu marca ya habla con una sola voz en cada output. Ahora optimizamos tu oferta"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">5.2</span>
+            <span class="video-title">Oferta: Reescribe tus materiales para convertir más</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~8 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno usa Claude para mejorar sus materiales de marketing existentes y aumentar la conversión</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Subir sitio web o presentación existente · Prompt de reescritura orientado a conversión · Criterios de un material de ventas efectivo</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Oferta mejorada. Ahora construimos el ecosistema de contenido que atrae clientes"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">5.3</span>
+            <span class="video-title">Ecosistema: Crea un lead magnet en minutos</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~8 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno genera un documento de alto valor con sus ideas únicas para captar leads cualificados</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Cómo aportar tu perspectiva única a Claude · Estructura de un lead magnet efectivo · Resultado: documento de 12+ páginas listo para publicar</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Siguiente nivel: una herramienta interactiva que te posiciona como referente en tu sector"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">5.4</span>
+            <span class="video-title">Liderazgo: Crea una app interactiva para tus clientes</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~10 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno crea una herramienta HTML funcional como activo de autoridad y diferenciación frente a la competencia</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Qué es una app HTML y cómo la genera Claude · Ejemplo: entrenador de guiones de ventas · Cómo entregársela a un cliente como activo de valor</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Ya tienes activos únicos que te diferencian. Ahora automatizamos para que Claude trabaje por ti"</span></div>
+        </div>
+        <div class="video-item">
+          <div class="video-item-header">
+            <span class="video-num">5.5</span>
+            <span class="video-title">Escalado: Automatiza tareas con la extensión de Chrome</span>
+            <span class="badge badge-demo">🎬 Demo</span>
+            <span class="video-dur">~10 min</span>
+            <span class="badge badge-pendiente">Pendiente</span>
+          </div>
+          <div class="info-row"><span class="info-label video-lbl">🎯 Objetivo</span><span class="info-val" style="font-weight:400">El alumno configura Claude para ejecutar tareas directamente en apps web de forma autónoma</span></div>
+          <div class="info-row"><span class="info-label video-lbl">📌 Puntos clave</span><span class="info-val" style="font-weight:400">Instalar y configurar la extensión de Chrome · Casos de uso: embudos, email, formularios · Cómo dar instrucciones para que Claude ejecute en tu nombre</span></div>
+          <div class="info-row" style="border-bottom:none"><span class="info-label video-lbl">➡️ CTA final</span><span class="info-val" style="font-weight:400;font-style:italic">"Enhorabuena — Claude ya trabaja por ti. Estás listo para implementar todo lo aprendido"</span></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+  const titles = {
+    overview: 'Resumen del Proyecto',
+    modelo: 'Modelo de Negocio',
+    personas: 'Buyer Personas',
+    pipeline: 'Pipeline de Clientes',
+    redes: 'Estrategia Redes Sociales',
+    nuc: 'Setup NUC',
+    docs: 'Documentos',
+    pasos: 'Próximos Pasos',
+    curso: 'Curso Online — Guion de Producción'
+  };
+
+  // ── CURSO: Estado de grabación ──
+  function updateGrabadosCount() {
+    const total = document.querySelectorAll('#curso .video-item').length;
+    const grabados = document.querySelectorAll('#curso .badge-grabado').length;
+    const el = document.getElementById('grabados-count');
+    if (!el) return;
+    el.textContent = grabados + '/' + total;
+    const box = document.getElementById('grabados-box');
+    if (box) {
+      box.className = 'stat-box ' + (grabados === total && total > 0 ? 'verde' : grabados > 0 ? '' : 'ambar');
+    }
+  }
+
+  function initCursoStatus() {
+    const saved = JSON.parse(localStorage.getItem('curso_status') || '{}');
+    document.querySelectorAll('#curso .video-item-header').forEach(function(header) {
+      const numEl = header.querySelector('.video-num');
+      const id = numEl ? numEl.textContent.trim() : null;
+      if (!id) return;
+      const badge = header.querySelector('.badge-pendiente, .badge-grabado');
+      if (!badge) return;
+      badge.title = 'Clic para cambiar estado';
+      if (saved[id] === 'grabado') {
+        badge.classList.remove('badge-pendiente');
+        badge.classList.add('badge-grabado');
+        badge.textContent = '✓ Grabado';
+      }
+      badge.addEventListener('click', function() {
+        const isGrabado = this.classList.contains('badge-grabado');
+        if (isGrabado) {
+          this.classList.remove('badge-grabado');
+          this.classList.add('badge-pendiente');
+          this.textContent = 'Pendiente';
+          saved[id] = 'pendiente';
+        } else {
+          this.classList.remove('badge-pendiente');
+          this.classList.add('badge-grabado');
+          this.textContent = '✓ Grabado';
+          saved[id] = 'grabado';
+        }
+        localStorage.setItem('curso_status', JSON.stringify(saved));
+        updateGrabadosCount();
+      });
+    });
+    updateGrabadosCount();
+  }
+
+  initCursoStatus();
+
+  // ── GUIONES POR VIDEO ──
+  const guiones = {
+    '0.1': {
+      ruta: null,
+      intro: 'Hola, soy María. En este curso te enseño a usar Claude para que trabaje por ti en tu negocio. Todo lo que verás aquí es 100% práctico — cada video incluye una demo que puedes replicar en tiempo real.',
+      desarrollo: 'Preséntate brevemente y explica tu experiencia con Claude. Presenta los 6 módulos del curso. Muestra la plataforma A Players Academy: cómo navegar entre videos, cómo marcar un video como visto y cómo volver a él. Recuerda que el curso incluye demos en vivo que pueden seguirse en paralelo.',
+      cierre: '"Empieza el Módulo 1 cuando estés lista. Te vas a sorprender con lo que puedes hacer. ¡Vamos allá!"'
+    },
+    '1.1': {
+      ruta: null,
+      intro: '¿Usas ChatGPT a diario? Lo que te voy a mostrar puede cambiar completamente tu forma de trabajar. Hay cuatro problemas concretos que seguramente ya has experimentado.',
+      desarrollo: '1) Salida genérica: todo suena igual, con ese "idioma IA" repetitivo y vacío. 2) Memoria deficiente: en conversaciones largas pierde el hilo. 3) Alucinaciones: inventa datos con total confianza. 4) GPTs en silos: los GPTs personalizados no se comunican entre sí ni con otras herramientas. Usa ejemplos reales de cada limitación.',
+      cierre: '"¿Y cuál es la alternativa? En el siguiente video te la presento. Spoiler: lo cambia todo."'
+    },
+    '1.2': {
+      ruta: null,
+      intro: 'Claude no es simplemente otra IA. Está diseñado para resultados empresariales reales, no solo para conversar. Hay cuatro razones concretas por las que lo elegí.',
+      desarrollo: '1) Razonamiento superior: maneja instrucciones complejas y mantiene el contexto. 2) Documentos formateados: genera Word, presentaciones y HTML con maquetación profesional. 3) Apps interactivas: crea herramientas HTML funcionales que puedes entregar a clientes. 4) Flujos sistémicos: se integra con otras herramientas y automatiza procesos de varios pasos. Muestra ejemplos visuales de outputs reales.',
+      cierre: '"Ahora que sabes el porqué, vamos a configurarlo juntos paso a paso en el Módulo 2."'
+    },
+    '2.1': {
+      ruta: ['claude.ai', 'Menú usuario (arriba dcha)', 'Upgrade to Pro · 20 $/mes', 'Descargar app de escritorio: claude.ai/download'],
+      intro: 'Antes de hacer cualquier demo necesitas tener la herramienta correcta. Te explico qué plan necesitas y por qué la app de escritorio es imprescindible.',
+      desarrollo: 'Plan Free: limitado en mensajes y sin acceso a modelos avanzados. Plan Pro (20 $/mes): necesario para la app de escritorio, modelos Opus y Sonnet, y funciones avanzadas como Cowork, automatización del navegador y tareas programadas. Muestra dónde descargar la app y cómo instalarla.',
+      cierre: '"Activa tu plan Pro antes del siguiente video — lo vas a necesitar para seguir las demos en directo."'
+    },
+    '2.2': {
+      ruta: ['Claude (app escritorio)', 'Nueva conversación', 'Selector de modelo (esquina sup. derecha del chat)', 'Elegir: Opus 4 / Sonnet 4.6 / Haiku 4.5'],
+      intro: 'Al abrir Claude lo primero que verás es el selector de modelo. ¿Cuál eliges? Aquí está la respuesta.',
+      desarrollo: 'DEMO: Abrir Claude → clic en el selector de modelo → mostrar las 3 opciones. Opus 4: razonamiento profundo, para análisis complejos, consume créditos rápido. Sonnet 4.6: el mejor para uso diario, eficiente y potente. Haiku 4.5: el más rápido, para preguntas simples. Haz la misma pregunta con dos modelos distintos para mostrar la diferencia.',
+      cierre: '"Para el día a día, Sonnet 4.6 es tu mejor aliado. Guarda eso. Ahora vamos a traer todo tu historial de ChatGPT a Claude."'
+    },
+    '2.3': {
+      ruta: ['Claude', 'Icono de perfil (esquina sup. dcha)', 'Settings', 'Capabilities', '"Importar historial de otra IA"', 'Copiar el prompt generado', 'Abrir ChatGPT en otra pestaña', 'Pegar el prompt → Copiar la respuesta', 'Volver a Claude → Pegar el resumen'],
+      intro: 'Si llevas tiempo usando ChatGPT, tienes un activo valiosísimo: tu historial con toda tu experiencia y contexto. Vamos a transferirlo a Claude en 5 minutos.',
+      desarrollo: 'DEMO paso a paso: Claude genera un prompt especial que, al pegarlo en ChatGPT, extrae un resumen estructurado de tu historial. Luego pegas ese resumen en Claude para que lo integre como base de conocimiento. Muestra cómo Claude reconoce y usa el contexto importado.',
+      cierre: '"Ya tienes a Claude con todo tu contexto. Pero esto es solo el principio. En el Módulo 3 lo hacemos verdaderamente tuyo con las Skills."'
+    },
+    '3.1': {
+      ruta: null,
+      intro: 'Hasta ahora Claude es una IA genérica. Puede ser muy buena, pero no te conoce. Las Skills cambian eso: convierten a Claude en TU asistente especializado con TU metodología.',
+      desarrollo: 'Explica la diferencia clave: un prompt genérico da instrucciones puntuales; una Skill entrena a Claude con tu forma de trabajar, tu voz y tus procesos. Ejemplos de Skills útiles: guía de estilo de marca, metodología de ventas, proceso de onboarding de clientes. Muestra un ejemplo antes/después de usar una Skill.',
+      cierre: '"En el siguiente video creamos tu primera Skill juntos, en directo. Prepara Claude abierto."'
+    },
+    '3.2': {
+      ruta: ['Claude', 'Nueva conversación', 'Escribir: "Hazme preguntas para profundizar y crear el skill perfecto"', 'Responder las preguntas de Claude (proceso iterativo)', 'Pedir: "Ahora redáctame la Skill completa en formato Markdown"', 'Copiar el resultado', 'Guardar como archivo .md'],
+      intro: 'Vamos a crear una Skill en directo. Puedes hacerlo al mismo tiempo que yo. Solo necesitas Claude abierto y tener claro qué quieres que haga por ti.',
+      desarrollo: 'DEMO: Usar el prompt de creación. Claude hará preguntas sobre tu metodología, tono, ejemplos de contenido, lo que quieres evitar, tu audiencia objetivo. Responde las preguntas en tiempo real mostrando la pantalla. Al final, pídele que lo redacte como Skill completa en Markdown. Cópialo y guárdalo.',
+      cierre: '"Ya tienes tu primera Skill — es tuya, refleja tu forma de trabajar. En el siguiente video la convertimos en un activo reutilizable."'
+    },
+    '3.3': {
+      ruta: ['Copiar contenido de la Skill desde Claude', 'Abrir editor de texto (Bloc de notas / TextEdit)', 'Guardar como: nombre-skill.md', '── IMPORTAR ──', 'Claude', 'Nuevo proyecto o conversación', 'Pegar el contenido .md en el contexto del proyecto'],
+      intro: 'Una Skill que no puedes reutilizar ni compartir es solo un texto. Vamos a convertirla en un activo portátil.',
+      desarrollo: 'DEMO: Copiar la Skill completa → guardarla como archivo .md. Abrir un proyecto nuevo en Claude → pegar el contenido para importarla. Caso de uso de compartir: enviarla a un cliente o a un miembro del equipo para que la use en su propio Claude.',
+      cierre: '"Ahora tienes Skills portátiles y reutilizables. Vamos al Módulo 4: conectamos Claude con tus aplicaciones favoritas."'
+    },
+    '4.1': {
+      ruta: ['Claude (app escritorio)', 'Icono de perfil (esquina sup. dcha)', 'Settings', 'Connectors', '"+ Añadir conector"', 'Seleccionar app (Gmail / Drive / Notion…)', 'Autorizar con OAuth', 'Confirmar → conector activo'],
+      intro: 'Los conectores son el puente entre Claude y todas tus herramientas de trabajo. Con ellos, Claude puede leer tus emails, acceder a tus documentos y trabajar con tus datos.',
+      desarrollo: 'Muestra la lista de conectores disponibles. Demo: conectar Gmail → en una conversación pedirle a Claude que resuma los últimos emails importantes o que redacte una respuesta. Menciona los casos de uso más comunes: Drive para documentos, Notion para la base de conocimiento, Calendar para gestionar agenda.',
+      cierre: '"Claude ya está conectado a tu ecosistema. Ahora lo aplicamos directamente a los pilares de tu negocio. Módulo 5."'
+    },
+    '5.1': {
+      ruta: ['Claude', 'Nueva conversación', 'Escribir: "Hazme preguntas para crear el skill perfecto para mi guía de estilo de marca"', 'Responder: tono de voz · vocabulario · colores · ejemplos que te gustan · qué evitar', 'Guardar la Skill como guia-marca.md'],
+      intro: '¿Alguna vez has pedido algo a ChatGPT y no suena para nada a ti? Ese problema se acaba aquí. Con esta Skill, Claude siempre hablará con tu voz.',
+      desarrollo: 'DEMO: Crear la Skill de guía de marca paso a paso. Claude pregunta sobre el tono (formal/cercano), el lenguaje (técnico/accesible), los colores, el estilo visual y lo que se debe evitar. Genera un texto SIN la Skill y luego CON ella para mostrar la diferencia real.',
+      cierre: '"Tu marca ya habla con una sola voz en cada output que genera Claude. Ahora optimizamos tu oferta de servicios."'
+    },
+    '5.2': {
+      ruta: ['Claude', 'Nueva conversación (con Skill de marca activa)', 'Adjuntar archivo (PDF/DOCX) o pegar texto de tu web', 'Prompt: "Reescribe esto para aumentar la conversión. Mantén mi voz de marca. Objetivo: [OBJETIVO]. Audiencia: [AUDIENCIA]"', 'Revisar y refinar el resultado'],
+      intro: 'Tienes materiales que ya funcionan, pero podrían funcionar mucho mejor. No hay que crearlos desde cero — Claude los mejora en minutos.',
+      desarrollo: 'DEMO: Subir o pegar el texto de una página de ventas o presentación existente. Pedir a Claude que la reescriba orientada a conversión. Muestra el resultado: titular más potente, estructura mejorada, CTA más claro. Haz una segunda iteración con feedback específico.',
+      cierre: '"Oferta mejorada. Ahora construimos el ecosistema de contenido que atrae nuevos clientes de forma constante."'
+    },
+    '5.3': {
+      ruta: ['Claude', 'Nueva conversación', 'Prompt: "Quiero crear un lead magnet sobre [TEMA]. Mis ideas únicas: [IDEAS]. Crea un documento de 10-15 páginas valioso para [AUDIENCIA]. Incluye: título, índice, introducción, desarrollo, conclusión y CTA"', 'Revisar y pedir ajustes', 'Exportar como Word o PDF'],
+      intro: 'Un lead magnet de calidad puede traerte clientes durante meses. El problema es que crearlos lleva horas. Con Claude, si le das tus ideas únicas, lo hace en minutos.',
+      desarrollo: 'DEMO: Usar el prompt con un tema real. Muestra cómo Claude estructura el documento, añade profundidad y mantiene coherencia. Desarrolla una sección con más detalle. Exporta el resultado final — debe ser un documento de 10-15 páginas con contenido real, no genérico.',
+      cierre: '"Siguiente nivel: una herramienta interactiva que te posiciona como referente y que ningún competidor tuyo tiene."'
+    },
+    '5.4': {
+      ruta: ['Claude (Sonnet 4.6 u Opus 4)', 'Nueva conversación', 'Prompt: "Crea una app HTML interactiva que funcione como [entrenador de guiones / calculadora / quiz]. Sin backend, diseño profesional con colores [COLORES], con mi marca. Dame el código HTML completo"', 'Copiar el código HTML', 'Guardar como archivo .html', 'Abrir en el navegador para probarla', 'Entregar al cliente el archivo .html'],
+      intro: 'Esto es lo que realmente te diferencia: entregar a un cliente una herramienta propia, interactiva y con tu marca. Algo que ningún competidor está haciendo.',
+      desarrollo: 'DEMO: Pedir a Claude que cree una app HTML (ej: entrenador de guiones de ventas, quiz de diagnóstico, calculadora de ROI). Copiar el código → guardar como .html → abrir en el navegador para mostrar que funciona. Muestra cómo el cliente percibe esto: no es un documento, es una herramienta.',
+      cierre: '"Ya tienes activos únicos que te diferencian completamente. Ahora el último paso: que Claude trabaje por ti mientras tú te dedicas a lo que importa."'
+    },
+    '5.5': {
+      ruta: ['Google Chrome', 'chrome.google.com/webstore', 'Buscar: "Claude"', 'Instalar extensión oficial de Anthropic', 'Clic en el icono de Claude (barra de extensiones, esquina sup. dcha)', 'Iniciar sesión con tu cuenta Claude Pro', 'Navegar a la app web donde quieres automatizar', 'Clic en el icono de Claude → dar instrucciones en lenguaje natural'],
+      intro: '¿Y si te dijera que Claude puede hacer cosas en tus apps web por ti, sin que tengas que hacerlo manualmente? Eso es exactamente lo que vamos a configurar ahora.',
+      desarrollo: 'DEMO: Instalar la extensión → iniciar sesión → navegar a una herramienta de email marketing o formulario → activar Claude → darle una instrucción concreta (ej: "Construye un formulario de captación con estos campos"). Muestra cómo Claude ve la pantalla y ejecuta la tarea.',
+      cierre: '"Claude ya trabaja por ti. Has completado el curso. Ahora tienes todo lo que necesitas para implementarlo en tu negocio. ¡Enhorabuena y a por ello!"'
+    }
+  };
+
+  function toggleGuion(videoId) {
+    const existing = document.getElementById('guion-expand-' + videoId);
+    const btn = document.querySelector('[data-guion="' + videoId + '"]');
+    if (existing) {
+      const isOpen = existing.style.display !== 'none';
+      existing.style.display = isOpen ? 'none' : 'block';
+      if (btn) btn.textContent = isOpen ? '📄 Ver guion' : '📄 Ocultar guion';
+      return;
+    }
+    const data = guiones[videoId];
+    if (!data) return;
+    let html = '<div class="guion-content">';
+    if (data.ruta) {
+      html += '<div class="guion-ruta"><span class="guion-ruta-label">🗺️ Ruta:</span>';
+      html += data.ruta.map(s => '<span class="guion-step">' + s + '</span>').join('<span class="guion-arrow"> → </span>');
+      html += '</div>';
+    }
+    html += '<div class="guion-grid">';
+    html += '<div class="guion-col guion-intro"><div class="guion-col-title">🎬 Intro</div><div class="guion-col-body">' + data.intro + '</div></div>';
+    html += '<div class="guion-col guion-desarrollo"><div class="guion-col-title">📖 Desarrollo</div><div class="guion-col-body">' + data.desarrollo + '</div></div>';
+    html += '<div class="guion-col guion-cierre"><div class="guion-col-title">✅ Cierre + CTA</div><div class="guion-col-body">' + data.cierre + '</div></div>';
+    html += '</div></div>';
+    const container = document.createElement('div');
+    container.id = 'guion-expand-' + videoId;
+    container.innerHTML = html;
+    const headers = document.querySelectorAll('#curso .video-num');
+    for (const h of headers) {
+      if (h.textContent.trim() === videoId) {
+        h.closest('.video-item').appendChild(container);
+        break;
+      }
+    }
+    if (btn) btn.textContent = '📄 Ocultar guion';
+  }
+
+  function initGuionButtons() {
+    document.querySelectorAll('#curso .video-item').forEach(function(item) {
+      const numEl = item.querySelector('.video-num');
+      if (!numEl || !guiones[numEl.textContent.trim()]) return;
+      const btn = document.createElement('button');
+      btn.className = 'guion-toggle-btn';
+      btn.setAttribute('data-guion', numEl.textContent.trim());
+      btn.textContent = '📄 Ver guion';
+      btn.onclick = function() { toggleGuion(numEl.textContent.trim()); };
+      item.appendChild(btn);
+    });
+  }
+
+  initGuionButtons();
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById('page-title').textContent = titles[id];
+    event.currentTarget.classList.add('active');
+  }
+</script>
+</body>
+</html>
