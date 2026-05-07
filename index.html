@@ -2155,4 +2155,87 @@
   }
 
   function analizarCliente() {
-    const { tamano, tipo, facturacion, dolor, canal, actitud } =
+    const { tamano, tipo, facturacion, dolor, canal, actitud } = selecciones;
+
+    let perfil, ofertaPrecio, ofertaDesc, tono, args;
+
+    // Lógica de clasificación
+    const esPyme = tamano === 'pyme';
+    const esComercial = tipo === 'comercial' || facturacion === 'alta';
+    const esCreativa = tipo === 'creativo';
+    const esEspecialista = tipo === 'consultor';
+    const esEscéptico = actitud === 'escéptico';
+    const quiereRedes = dolor === 'contenido';
+    const quiereROI = dolor === 'roi';
+
+    if (esPyme) {
+      perfil = '🏢 PYME — Perfil secundario';
+      ofertaPrecio = '~2.500 €';
+      ofertaDesc = 'Claude Kick-Off Day para equipo (3 usuarios) + Evolución Continua ~400€/mes. Requiere propuesta directa personalizada, no masterclass.';
+      tono = 'Profesional y orientado a ROI con el CEO. Tranquilizador con los usuarios. Hablar de "inversión" nunca de "gasto".';
+      args = [
+        'Tu equipo de 3 puede rendir como uno de 6, sin contratar a nadie',
+        'Nosotros gestionamos toda la tecnología — vosotros os dedicáis al negocio',
+        'Precio equivalente a 1 mes de un empleado junior, con impacto en toda la empresa'
+      ];
+    } else if (esComercial || quiereROI) {
+      perfil = '🌍 El Comercial de Alto Rendimiento (BP3)';
+      ofertaPrecio = '895 € + auto';
+      ofertaDesc = 'Kick-Off Day (895€) + 1ª automatización de seguimiento o reportes (desde 495€) + Evolución Continua ~297€/mes.';
+      tono = 'Directo y enfocado en ingresos. Nada de "productividad" — hablar de multiplicar cuentas, facturación y capacidad de gestión. Respeta su inteligencia, no expliques de más.';
+      args = [
+        '¿Cuánto facturarías si pudieras gestionar el doble de cuentas con el mismo tiempo?',
+        'Claude te permite operar en varios idiomas y zonas horarias sin coste adicional',
+        'Automatiza los reportes que te roban horas — y llega con más energía a cerrar ventas'
+      ];
+    } else if (esEspecialista) {
+      perfil = '🧩 La Especialista de Nicho (BP2)';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) + Evolución Continua 197–297€/mes. Si es proactiva, ofrecer primera automatización como upsell inmediato (desde 495€).';
+      tono = 'Empático y preciso. Su miedo es perder la autenticidad — demuéstrale que Claude habla con su voz. Usa ejemplos de su sector. No tecnología, sino impacto en sus clientes.';
+      args = [
+        'Claude puede hablar con tu voz, tu metodología y para tu audiencia — nada suena genérico',
+        'Puedes atender a más clientes sin trabajar más horas — la calidad no baja, sube',
+        'Materiales para clientes que tardaban horas ahora los tienes en minutos'
+      ];
+    } else if (esCreativa || quiereRedes) {
+      perfil = '🎨 La Creativa Desbordada (BP1)';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) + Evolución Continua 197€/mes. Si le preocupan las redes, mencionar el Dashboard de Contenido próximamente.';
+      tono = esEscéptico
+        ? 'Muy cercano y tranquilizador. No explicar la tecnología — mostrar UNA cosa concreta que le quita una carga que odia. Sin jerga. Sin promesas grandes. Un paso pequeño.'
+        : 'Cercano y empático. Hablar de liberación, no de eficiencia. Mostrar antes/después de una tarea que detesta. Simple, visual, concreto.';
+      args = [
+        'Muéstrame una cosa de tu trabajo que odias hacer — en 10 minutos, Claude lo estará haciendo por ti',
+        'Tus redes pueden estar activas sin que tú grabes ni escribas todos los días',
+        'Presupuestos, emails de seguimiento, propuestas — Claude los hace en tu estilo'
+      ];
+    } else {
+      // Default genérico
+      perfil = '👤 Perfil mixto — necesitas más información';
+      ofertaPrecio = '895 €';
+      ofertaDesc = 'Claude Kick-Off Day (895€) como entrada. Completa más preguntas para afinar la recomendación.';
+      tono = 'Pregunta qué tarea le quita más tiempo. Esa respuesta te dice todo lo que necesitas saber.';
+      args = [
+        '¿Qué tarea de tu negocio más odias o más tiempo te quita?',
+        'Pregunta si ya usa IA de alguna forma — su respuesta define el punto de partida',
+        'Cuéntale el Kick-Off Day como una jornada, no como software — "en un día, Claude trabaja para ti"'
+      ];
+    }
+
+    // Mostrar resultado
+    document.getElementById('res-titulo').textContent = perfil;
+    document.getElementById('res-sub').textContent = canal
+      ? 'Canal de entrada: ' + { masterclass: 'Masterclass', linkedin: 'LinkedIn', instagram: 'Instagram', referido: 'Referido' }[canal]
+      : 'Selecciona el canal de entrada para más detalle';
+    document.getElementById('res-precio').textContent = ofertaPrecio;
+    document.getElementById('res-oferta-desc').textContent = ofertaDesc;
+    document.getElementById('res-tono').textContent = tono;
+    const ul = document.getElementById('res-argumentos');
+    ul.innerHTML = args.map(a => '<li>' + a + '</li>').join('');
+    document.getElementById('resultado-analizador').classList.add('visible');
+    document.getElementById('resultado-analizador').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
